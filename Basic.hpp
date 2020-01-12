@@ -53,10 +53,11 @@ class Basic {
 		XImage* xImageBackground;
 		XWindowChanges changes;
 		XWindowAttributes winAtt;
+		XSetWindowAttributes setWinAtt;
 		Cursor cursor;
 		XEvent sendEvent;
 		//TODO figure out the actual number needed for these and name appropriately
-		Window frame, newFrame, closeButton, eventsFrame, temp, dropdown;
+		Window frame, newFrame, closeButton, eventsFrame, temp, dropdown, client;
 		Pixmap curMap, backgroundMap, intermediate;
 		char* frontData;
 		char* backData;

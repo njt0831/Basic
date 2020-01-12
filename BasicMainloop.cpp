@@ -97,14 +97,16 @@ void Basic::Mainloop(){
 				XMapWindow(display_, event_.xmaprequest.window);
 
 				LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
+				
+
+				setWinAtt.backing_store = 2;
+				XChangeWindowAttributes(display_, newFrame, CWBackingStore, &setWinAtt);
+				XDrawString(display_, newFrame, XDefaultGC(display_, DefaultScreen(display_)), FRAME_BORDER_WIDTH, (int) FRAME_TITLE_BAR_WIDTH / 2, (char*) textProp.value, strlen((char*) textProp.value));
 	
 				clientFrame_[event_.xmaprequest.window] = newFrame;
 				frameClient_[newFrame] = event_.xmaprequest.window;
 				killClient_[closeButton] = event_.xmaprequest.window;
 				frameKill_[newFrame] = closeButton;
-
-				//fprintf(f, "Mapped Frame: %lld\n", frame);
-			       	//fprintf(f, "Mapped Client: %lld\n", event_.xmaprequest.window);
 				
 				// Why do I even implement the save set?
 				//if (!saveSet_.count(xmaprequest.window)){
@@ -120,7 +122,7 @@ void Basic::Mainloop(){
 			case UnmapNotify:
 
 				if (!(clientFrame_.count(event_.xunmap.window)) || (event_.xunmap.event == root_) || frameClient_.count(event_.xunmap.window) || killClient_.count(event_.xunmap.window)){break;}
-
+				
 				frame = clientFrame_[event_.xunmap.window];
 
 				if (mouseHook && hookWin == frame){
@@ -130,12 +132,9 @@ void Basic::Mainloop(){
 				}
 
 				XUnmapWindow(display_, frame);
+				//XReparentWindow(display_, event_.xunmap.window, root_, winAtt.x, winAtt.y);
 				XDestroySubwindows(display_, frame);
 				XDestroyWindow(display_, frame);
-				
-
-				fprintf(f, "UnMapped Frame: %lld\n", frame);
-			       	fprintf(f, "UnMapped Client: %lld\n", event_.xunmap.window);
 
 				clientFrame_.erase(event_.xunmap.window);
 				frameClient_.erase(frame);

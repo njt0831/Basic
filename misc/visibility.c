@@ -69,22 +69,15 @@ int main(int argc, char** argv){
 
 		if (!strcmp((char*)textProp.value, winName)){
 
-			// Attempting to unmap a frame
-			// Current WM implementation ignores this map request
-			// then this locks up waiting for an event it will never get
-
-			// Can change this to correctly send unmap to the spotify client directly
-			// Can change WM to unmap frames correctly, which will probably require a rewrite of unmap window notify catch
-
 			if (hide){
 				
-				XUnmapWindow(display, subWindows[0]);
+				XUnmapSubwindows(display, subWindows[i]);
 				showFlag = 1;
 				break;
 
 			}else{
 
-				XMapWindow(display, subWindows[0]);
+				XMapWindow(display, subWindows[i]);
 				showFlag = 1;
 				break;
 
