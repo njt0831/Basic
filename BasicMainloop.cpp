@@ -50,21 +50,38 @@ void Basic::Mainloop(){
 				}
 
 				XGetWMName(display_, event_.xmaprequest.window, &textProp);
+				XGetClassHint(display_, event_.xmaprequest.window, &winClass);
 				XGetWindowAttributes(display_, event_.xmaprequest.window, &winAtt);
-			
+
+				// Fix this when it matters
+				// Some clients wont want to be parented so they dont set their WM_NAME property			
 				if (textProp.value == NULL){
 
-					// Fix this when it matters
-					// Some clients wont want to be parented so they dont set their WM_NAME property
+					if (winClass.res_name == NULL){
 
-					unsigned char fuckyouspotify[8] = "spotify";
-					textProp.value = fuckyouspotify;
+						winClass.res_name = (char*) "";
+					
+					}else{
+						// Just set any Null textprop to spotify
 
-					textProp.encoding = XInternAtom(display_, "WM_NAME", true);
-					textProp.nitems = 8;
-					textProp.format = 8;
+						unsigned char* fuckspotify = (unsigned char*) "spotify";
+						textProp.value = (unsigned char*) fuckspotify;
+						textProp.encoding = XInternAtom(display_, "WM_NAME", true);
+						textProp.nitems = 8;
+						textProp.format = 8;
+					
+					}
 				
-				}
+				}	
+				
+				//fprintf(f, "-------------------");
+				//fprintf(f, (char*) textProp.value);
+				//fprintf(f, "\n");
+				//fprintf(f, winClass.res_name);
+				//fprintf(f, "\n");
+				//fprintf(f, winClass.res_class);
+				//fprintf(f, "\n");
+				//fprintf(f, "-------------------");
 
 				if (!(strcmp((char*)textProp.value, "Steam")) || !(strcmp((char*)textProp.value, "Rocket League"))){
 				
@@ -89,15 +106,14 @@ void Basic::Mainloop(){
 					
 				XReparentWindow(display_, event_.xmaprequest.window, newFrame, 0, FRAME_TITLE_BAR_WIDTH);
 				XReparentWindow(display_, closeButton, newFrame, winAtt.width - 25, 4);	
-
-				XSetWMName(display_, newFrame, &textProp);
-
+	
 				XMapWindow(display_, newFrame);	
 				XMapWindow(display_, closeButton);
 				XMapWindow(display_, event_.xmaprequest.window);
 
 				LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
 				
+				XSetWMName(display_, newFrame, &textProp);
 
 				setWinAtt.backing_store = 2;
 				XChangeWindowAttributes(display_, newFrame, CWBackingStore, &setWinAtt);
@@ -132,7 +148,6 @@ void Basic::Mainloop(){
 				}
 
 				XUnmapWindow(display_, frame);
-				//XReparentWindow(display_, event_.xunmap.window, root_, winAtt.x, winAtt.y);
 				XDestroySubwindows(display_, frame);
 				XDestroyWindow(display_, frame);
 
@@ -155,9 +170,8 @@ void Basic::Mainloop(){
 					sendEvent.xclient.data.l[1] = CurrentTime;
 					XSendEvent(display_, killClient_[event_.xbutton.window], false, NoEventMask, &sendEvent);
 				
-			       		fprintf(f, "Killing: %lld\n", event_.xbutton.window);
+			       		// fprintf(f, "Killing: %lld\n", event_.xbutton.window);
 					// Deal with the case where a popup window prompts the user
-
 
 				}else if ((event_.xbutton.window != root_) && (!dropIndex_.count(event_.xbutton.window))){
 

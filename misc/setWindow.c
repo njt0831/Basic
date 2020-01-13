@@ -5,6 +5,8 @@
 #include <string.h>
 #include <math.h>
 #include <iostream>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
 
 int intFromString(char* str, int len){
 
@@ -28,6 +30,9 @@ int main(int argc, char** argv){
 
 	}
 
+	Display* display = XOpenDisplay(NULL);
+	Window root = DefaultRootWindow(display);
+
 	int xnew = 0;
 	int ynew = 0;
 	int wnew = 0;
@@ -49,7 +54,7 @@ int main(int argc, char** argv){
 
 		}else if(!strcmp(argv[c], "-f")){
 	
-			if(!argv[c + 1]){
+			if(!strcmp(argv[c + 1], "all")){
 
 				full = 1;
 			       
@@ -62,6 +67,7 @@ int main(int argc, char** argv){
 				full = 3;
 			
 			}
+
 			c++;
 			
 		}else if(!strcmp(argv[c], "-w")){
@@ -73,13 +79,46 @@ int main(int argc, char** argv){
 			
 			hnew = intFromString(argv[c + 1], strlen(argv[c + 1]));
 			c++;
-		}	
 
+		}else if(!strcmp(argv[c], "-wn")){
+			
+			Window rootBack, parentBack;
+			Window* subWindows;
+			unsigned int subWindowCount;
+			XQueryTree(display, root, &rootBack, &parentBack, &subWindows, &subWindowCount);
+			XTextProperty textProp;
+			XWindowAttributes winAtt;
 
-	}
+			for (int i=0; i < subWindowCount; i++){
+		
+				XGetWindowAttributes(display, subWindows[i], &winAtt);	
+				XGetWMName(display, subWindows[i], &textProp);
 
-	Display* display = XOpenDisplay(NULL);
-	Window root = DefaultRootWindow(display);
+				if (winAtt.map_state != 2){
+			
+					continue;
+
+				}
+
+				if (!strcmp((char*) textProp.value, argv[c + 1])){
+
+					window = subWindows[i];
+					break;
+
+				}
+			}
+
+		
+			if (!window){
+
+				// Didnt find the string. Put code here to print out all visible names
+				return 1;
+
+			}
+
+			c++;
+		}
+	}	
 
 	if (!window){
 		
@@ -201,6 +240,9 @@ int main(int argc, char** argv){
 	
 	}
 	
+	XSetInputFocus(display, window, RevertToParent, CurrentTime);
+	XRaiseWindow(display, window);
+
 	XEvent event_;
 
 	while(1){

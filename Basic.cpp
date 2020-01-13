@@ -177,8 +177,8 @@ void Basic::Initialize(){
 		XSetInputFocus(display_, newFrame, RevertToParent, CurrentTime);
 		XGrabButton(display_, AnyButton, AnyModifier, newFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);
 
-		fprintf(f, "Mapped Frame: %lld\n", frame);
-		fprintf(f, "Mapped Client: %lld\n", unframedWindows[i]);
+		//fprintf(f, "Mapped Frame: %lld\n", frame);
+		//fprintf(f, "Mapped Client: %lld\n", unframedWindows[i]);
 
 	        //XGetWMName(display_, unframedWindows[i], &textProp);
 		//fprintf(f, reinterpret_cast<const char*> (textProp.value));
