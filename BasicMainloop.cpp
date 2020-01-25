@@ -19,24 +19,9 @@ void Basic::Mainloop(){
 				changes.border_width = event_.xconfigurerequest.border_width;
 				changes.sibling = event_.xconfigurerequest.above;
 				changes.stack_mode = event_.xconfigurerequest.detail;	
-				
-				
-				if (clientFrame_.count(event_.xconfigurerequest.window)){
-					
-					frame = clientFrame_[event_.xconfigurerequest.window];
-
-					XGetWindowAttributes(display_, frame, &winAtt);
-					
-					changes.x = 0;
-					changes.y = FRAME_TITLE_BAR_WIDTH;
-					changes.width = winAtt.width;
-					changes.height = winAtt.height;
-					XConfigureWindow(display_, event_.xconfigurerequest.window, event_.xconfigurerequest.value_mask, &changes);
-				
-				}else{
 
 				XConfigureWindow(display_, event_.xconfigurerequest.window, event_.xconfigurerequest.value_mask, &changes);
-				}
+				
 	
 
 				break;
@@ -102,14 +87,15 @@ void Basic::Mainloop(){
 				closeButton = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);
 	
 				XSelectInput(display_, newFrame, SubstructureRedirectMask | SubstructureNotifyMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
-				XSelectInput(display_, closeButton, ButtonPressMask);
-					
+				XSelectInput(display_, closeButton, ButtonPressMask);	
+
+				XMapWindow(display_, event_.xmaprequest.window);
+
 				XReparentWindow(display_, event_.xmaprequest.window, newFrame, 0, FRAME_TITLE_BAR_WIDTH);
 				XReparentWindow(display_, closeButton, newFrame, winAtt.width - 25, 4);	
 	
 				XMapWindow(display_, newFrame);	
-				XMapWindow(display_, closeButton);
-				XMapWindow(display_, event_.xmaprequest.window);
+				XMapWindow(display_, closeButton);	
 
 				LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
 				
@@ -132,7 +118,7 @@ void Basic::Mainloop(){
 
 				//}
 				XGrabButton(display_, AnyButton, AnyModifier, newFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);	
-			
+
 				break;
 
 			case UnmapNotify:
@@ -174,11 +160,20 @@ void Basic::Mainloop(){
 					// Deal with the case where a popup window prompts the user
 
 				}else if ((event_.xbutton.window != root_) && (!dropIndex_.count(event_.xbutton.window))){
+				
+					if (clientFrame_.count(event_.xbutton.window)){
+						
+						frame = clientFrame_[event_.xbutton.window];
+						XSetInputFocus(display_, frame, RevertToParent, CurrentTime);
+						XRaiseWindow(display_, frame);	
 
-					XSetInputFocus(display_, event_.xbutton.window, RevertToParent, CurrentTime);
-					XRaiseWindow(display_, event_.xbutton.window);
-					XGetWindowAttributes(display_, event_.xbutton.window, &winAtt);
-					SetGrabState(winAtt, event_.xbutton);
+					}else{
+				
+						XSetInputFocus(display_, event_.xbutton.window, RevertToParent, CurrentTime);
+						XRaiseWindow(display_, event_.xbutton.window);
+						XGetWindowAttributes(display_, event_.xbutton.window, &winAtt);
+						SetGrabState(winAtt, event_.xbutton);
+					}
 
 				}else if (dropIndex_.count(event_.xbutton.window)){
 

@@ -124,7 +124,6 @@ int main(int argc, char** argv){
 		
 		int revertHolder;
 		XGetInputFocus(display, &window, &revertHolder); 
-		
 	}
 	
 	Window rootBack, parentBack;
@@ -149,8 +148,9 @@ int main(int argc, char** argv){
 
 				}else{
 
-					XResizeWindow(display, subWindows[i], DISPLAY_WIDTH - FRAME_BORDER_WIDTH * 2, DISPLAY_HEIGHT - FRAME_TITLE_BAR_WIDTH - FRAME_BORDER_WIDTH * 2);
 					XMoveWindow(display, subWindows[i], 0, FRAME_TITLE_BAR_WIDTH);
+					XResizeWindow(display, subWindows[i], DISPLAY_WIDTH - FRAME_BORDER_WIDTH * 2, DISPLAY_HEIGHT - FRAME_TITLE_BAR_WIDTH - FRAME_BORDER_WIDTH * 2);
+					
 				}
 			}
 			
@@ -166,9 +166,10 @@ int main(int argc, char** argv){
 					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - FRAME_TITLE_BAR_WIDTH - 3, 4);
 
 				}else{
-
-					XResizeWindow(display, subWindows[i], DISPLAY_WIDTH / 2, DISPLAY_HEIGHT - FRAME_TITLE_BAR_WIDTH - FRAME_BORDER_WIDTH * 2);
+					
 					XMoveWindow(display, subWindows[i], 0, FRAME_TITLE_BAR_WIDTH);
+					XResizeWindow(display, subWindows[i], DISPLAY_WIDTH / 2, DISPLAY_HEIGHT - FRAME_TITLE_BAR_WIDTH - FRAME_BORDER_WIDTH * 2);
+					
 				}
 			}
 		
@@ -184,9 +185,10 @@ int main(int argc, char** argv){
 					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - FRAME_TITLE_BAR_WIDTH - 3, 4);
 
 				}else{
-
-					XResizeWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - FRAME_BORDER_WIDTH * 2, DISPLAY_HEIGHT - FRAME_TITLE_BAR_WIDTH - FRAME_BORDER_WIDTH * 2);
 					XMoveWindow(display, subWindows[i], 0, FRAME_TITLE_BAR_WIDTH);
+					XResizeWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - FRAME_BORDER_WIDTH * 2, DISPLAY_HEIGHT - FRAME_TITLE_BAR_WIDTH - FRAME_BORDER_WIDTH * 2);
+					
+
 				}
 			}
 		
