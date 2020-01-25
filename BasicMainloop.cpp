@@ -20,8 +20,19 @@ void Basic::Mainloop(){
 				changes.sibling = event_.xconfigurerequest.above;
 				changes.stack_mode = event_.xconfigurerequest.detail;	
 
-				XConfigureWindow(display_, event_.xconfigurerequest.window, event_.xconfigurerequest.value_mask, &changes);
+				if (clientFrame_.count(event_.xconfigurerequest.window)){
+
+					frame = clientFrame_[event_.xconfigurerequest.window];
+					XGetWindowAttributes(display_, frame, &winAtt);
+
+					XMoveWindow(display_, event_.xconfigurerequest.window, 0, FRAME_TITLE_BAR_WIDTH);
+					XResizeWindow(display_, event_.xconfigurerequest.window, winAtt.width, winAtt.height - FRAME_TITLE_BAR_WIDTH + FRAME_BORDER_WIDTH);
+
+				}else{
+
+					XConfigureWindow(display_, event_.xconfigurerequest.window, event_.xconfigurerequest.value_mask, &changes);
 				
+				}				
 	
 
 				break;
@@ -87,15 +98,14 @@ void Basic::Mainloop(){
 				closeButton = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);
 	
 				XSelectInput(display_, newFrame, SubstructureRedirectMask | SubstructureNotifyMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
-				XSelectInput(display_, closeButton, ButtonPressMask);	
-
-				XMapWindow(display_, event_.xmaprequest.window);
+				XSelectInput(display_, closeButton, ButtonPressMask);		
 
 				XReparentWindow(display_, event_.xmaprequest.window, newFrame, 0, FRAME_TITLE_BAR_WIDTH);
 				XReparentWindow(display_, closeButton, newFrame, winAtt.width - 25, 4);	
 	
 				XMapWindow(display_, newFrame);	
-				XMapWindow(display_, closeButton);	
+				XMapWindow(display_, closeButton);
+				XMapWindow(display_, event_.xmaprequest.window);
 
 				LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
 				
