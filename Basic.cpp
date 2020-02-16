@@ -141,41 +141,44 @@ void Basic::LoadBackgroundResource(const char* resourcePath, Window window, unsi
 void Basic::Initialize(){
 	
 	ResetGrab();
-	XSync(display_, false);	
-	XGrabServer(display_);
 
-	Window rootBack, parentBack;
-	Window* unframedWindows;
-	unsigned int unframedWindowCount;
-	XQueryTree(display_, root_, &rootBack, &parentBack, &unframedWindows, &unframedWindowCount);
-	//XClassHint test;
-	winClass.res_name = NULL;
-
-	for (unsigned int i = 0; i < unframedWindowCount; i++){
-
-		
-		XGetWindowAttributes(display_, unframedWindows[i], &winAtt);
-
-		newFrame = XCreateSimpleWindow(display_, root_, winAtt.x, winAtt.y, winAtt.width, winAtt.height + FRAME_TITLE_BAR_WIDTH, FRAME_BORDER_WIDTH, FRAME_BORDER_COLOR, FRAME_COLOR);
-		closeButton = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);
-				
-		XSelectInput(display_, newFrame, SubstructureNotifyMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
-		XSelectInput(display_, closeButton, ButtonPressMask);	
-
-		XReparentWindow(display_, unframedWindows[i], newFrame, 0, FRAME_TITLE_BAR_WIDTH);
-		XReparentWindow(display_, closeButton, newFrame, winAtt.width - 25, 4);
-
-		XMapWindow(display_, newFrame);
-		XMapWindow(display_, closeButton);
-		LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
+	// Removing crash recovery code for now 
 	
-		clientFrame_[unframedWindows[i]] = newFrame;
-		frameClient_[newFrame] = unframedWindows[i];
-		killClient_[closeButton] = unframedWindows[i];
-		frameKill_[newFrame] = closeButton;
+	//XSync(display_, false);	
+	//XGrabServer(display_);
+
+	//Window rootBack, parentBack;
+	//Window* unframedWindows;
+	//unsigned int unframedWindowCount;
+	//XQueryTree(display_, root_, &rootBack, &parentBack, &unframedWindows, &unframedWindowCount);
+	//XClassHint test;
+	//winClass.res_name = NULL;
+
+	//for (unsigned int i = 0; i < unframedWindowCount; i++){
+
 		
-		XSetInputFocus(display_, newFrame, RevertToParent, CurrentTime);
-		XGrabButton(display_, AnyButton, AnyModifier, newFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);
+	//	XGetWindowAttributes(display_, unframedWindows[i], &winAtt);
+
+	//	newFrame = XCreateSimpleWindow(display_, root_, winAtt.x, winAtt.y, winAtt.width, winAtt.height + FRAME_TITLE_BAR_WIDTH, FRAME_BORDER_WIDTH, FRAME_BORDER_COLOR, FRAME_COLOR);
+	//	closeButton = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);
+				
+	//	XSelectInput(display_, newFrame, SubstructureNotifyMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
+	//	XSelectInput(display_, closeButton, ButtonPressMask);	
+
+	//	XReparentWindow(display_, unframedWindows[i], newFrame, 0, FRAME_TITLE_BAR_WIDTH);
+	//	XReparentWindow(display_, closeButton, newFrame, winAtt.width - 25, 4);
+
+	//	XMapWindow(display_, newFrame);
+	//	XMapWindow(display_, closeButton);
+	//	LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
+	
+	//	clientFrame_[unframedWindows[i]] = newFrame;
+	//	frameClient_[newFrame] = unframedWindows[i];
+	//	killClient_[closeButton] = unframedWindows[i];
+	//	frameKill_[newFrame] = closeButton;
+		
+	//	XSetInputFocus(display_, newFrame, RevertToParent, CurrentTime);
+	//	XGrabButton(display_, AnyButton, AnyModifier, newFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);
 
 		//fprintf(f, "Mapped Frame: %lld\n", frame);
 		//fprintf(f, "Mapped Client: %lld\n", unframedWindows[i]);
@@ -184,10 +187,10 @@ void Basic::Initialize(){
 		//fprintf(f, reinterpret_cast<const char*> (textProp.value));
 		//XGetClassHint(display_, unframedWindows[i], &test);
 		
-	}
+	//}
 
-	XFree(unframedWindows);
-	XUngrabServer(display_);
+	//XFree(unframedWindows);
+	//XUngrabServer(display_);
 
 }
 
@@ -242,7 +245,7 @@ void Basic::ResetGrab(){
 	resizeRight = false;
 	resizeDown = false;
 	resizeUp = false;
-	
+	releaseTime = std::chrono::system_clock::now();
 }
 
 void Basic::SetPointer(int mx, int my){
@@ -272,6 +275,32 @@ void Basic::SetGrabState(XWindowAttributes winAtt, XButtonPressedEvent e){
 
 	}
 
+}
+
+void Basic::MaximizeWindow(Window window){
+
+	Window rootBack, parentBack;
+	Window* subWindows;
+	unsigned int subWindowCount;
+	XQueryTree(display_, window, &rootBack, &parentBack, &subWindows, &subWindowCount);
+
+	XResizeWindow(display_, window, DISPLAY_WIDTH - FRAME_BORDER_WIDTH * 2, DISPLAY_HEIGHT - FRAME_BORDER_WIDTH * 2);
+	XMoveWindow(display_, window, 0, 0);
+
+	for (unsigned int i=0;i < subWindowCount; i++){
+		
+		if (i){
+			
+			XMoveWindow(display_, subWindows[i], DISPLAY_WIDTH - 30, 4);
+
+		}else{
+
+			XMoveWindow(display_, subWindows[i], 0, FRAME_TITLE_BAR_WIDTH);
+			XResizeWindow(display_, subWindows[i], DISPLAY_WIDTH - FRAME_BORDER_WIDTH * 2, DISPLAY_HEIGHT - FRAME_TITLE_BAR_WIDTH - FRAME_BORDER_WIDTH * 2);
+					
+		}
+	}
+			
 }
 
 void Basic::Action(){

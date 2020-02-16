@@ -7,6 +7,8 @@
 #include <sys/time.h>
 #include <string>
 #include <unistd.h>
+#include <chrono>
+#include <ctime>
 
 
 extern "C"{
@@ -46,6 +48,8 @@ class Basic {
 		unsigned int winHookx, winHooky, winHookWidth, winHookHeight, pHookx, pHooky, backgroundCount;
 		int mousex, mousey, currentBackground;
 		Window hookWin;
+		std::chrono::time_point<std::chrono::system_clock> releaseTime;
+		std::chrono::duration<double> diff;
 		
 		// TODO Figure out how to deal with this random shit. Probably shouldnt be member data
 		cv::Mat img;
@@ -56,6 +60,7 @@ class Basic {
 		XSetWindowAttributes setWinAtt;
 		Cursor cursor;
 		XEvent sendEvent;
+	
 		//TODO figure out the actual number needed for these and name appropriately
 		Window frame, newFrame, closeButton, eventsFrame, temp, dropdown, client;
 		Pixmap curMap, backgroundMap, intermediate;
@@ -79,7 +84,9 @@ class Basic {
 		void NextRandomDesktopBackground();
 		void ResetGrab();
 		void SetPointer(int mx, int my);
+		void MaximizeWindow(Window window);
 		void Action();
+		
 				
 		//TODO actually implement error handling you fucking caveman
 		

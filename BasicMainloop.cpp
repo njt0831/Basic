@@ -106,6 +106,7 @@ void Basic::Mainloop(){
 				XMapWindow(display_, newFrame);	
 				XMapWindow(display_, closeButton);
 				XMapWindow(display_, event_.xmaprequest.window);
+				XMoveWindow(display_, event_.xmaprequest.window, 0, FRAME_TITLE_BAR_WIDTH); 
 
 				LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
 				
@@ -144,7 +145,7 @@ void Basic::Mainloop(){
 				}
 
 				XUnmapWindow(display_, frame);
-				XDestroySubwindows(display_, frame);
+				XDestroyWindow(display_, frameKill_[frame]);
 				XDestroyWindow(display_, frame);
 
 				clientFrame_.erase(event_.xunmap.window);
@@ -178,11 +179,13 @@ void Basic::Mainloop(){
 						XRaiseWindow(display_, frame);	
 
 					}else{
-				
+
 						XSetInputFocus(display_, event_.xbutton.window, RevertToParent, CurrentTime);
 						XRaiseWindow(display_, event_.xbutton.window);
+
 						XGetWindowAttributes(display_, event_.xbutton.window, &winAtt);
 						SetGrabState(winAtt, event_.xbutton);
+					
 					}
 
 				}else if (dropIndex_.count(event_.xbutton.window)){
@@ -272,7 +275,16 @@ void Basic::Mainloop(){
 
 			case ButtonRelease:
 				
+				diff = std::chrono::system_clock::now() - releaseTime;
+
+				if (diff.count() < .30){
+
+					MaximizeWindow(event_.xbutton.window);		
+
+				}		
+
 				ResetGrab();
+				
 				if (dropdown){
 
 					if (dropshowflag){
