@@ -68,7 +68,15 @@ void Basic::Mainloop(){
 					
 					}
 				
-				}	
+				}else if (!(strcmp((char*)textProp.value, "Mozilla Firefox"))){
+					
+					unsigned char* fuckspotify = (unsigned char*) "firefox";
+					textProp.value = (unsigned char*) fuckspotify;
+					textProp.encoding = XInternAtom(display_, "WM_NAME", true);
+					textProp.nitems = 8;
+					textProp.format = 8;
+					
+				}
 				
 				//fprintf(f, "-------------------");
 				//fprintf(f, (char*) textProp.value);
