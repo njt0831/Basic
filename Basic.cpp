@@ -152,6 +152,8 @@ void Basic::LoadBackgroundResource(const char* resourcePath, Window window, unsi
 void Basic::Initialize(){
 	
 	ResetGrab();
+	std::system("xterm -g 94x23+100+75 -bg black -fg blue&");
+
 
 	// Removing crash recovery code for now 
 	
