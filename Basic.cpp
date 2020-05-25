@@ -89,6 +89,17 @@ void Basic::LoadResource(const char* resourcePath, Window window, unsigned int w
 
 void Basic::LoadBackgroundResource(const char* resourcePath, Window window, unsigned int width, unsigned int height){
 	
+	img = cv::imread(resourcePath);
+	xImageBackground = XCreateImage(display_, XDefaultVisual(display_, DefaultScreen(display_)), 24, ZPixmap, 0, (char*) img.data, width * .75, height, 32, width*3);
+	xImageBackground->bits_per_pixel = 24;
+       	xImageBackground->width = width;
+	backgroundMap = XCreatePixmap(display_, root_, width, height, 24);
+	XPutImage(display_, backgroundMap, XDefaultGC(display_, DefaultScreen(display_)), xImageBackground, 0, 0, 0, 0, width, height);
+	XSetWindowBackgroundPixmap(display_, window, backgroundMap);
+	XClearWindow(display_, window);
+	return;
+
+	// I am too lazy to comment the rest out
 	if (currentBackground < 0){
 
 		img = cv::imread(resourcePath);

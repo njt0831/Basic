@@ -1,0 +1,12 @@
+Bugs
+-------------------------------------------------------------------
+Desktop dropdown randomly fullscreens itself when opening sometimes
+Window resizing commands sometimes freak out/resize only the frame
+Windows that arent expecting frames dont behave properly
+
+Additions
+-------------------------------------------------------------------
+Taskbar? Need some way to easily hide/minimize windows
+Login prompt screen
+Minimize/Maximize Icons
+Nice font and size for frame titles
