@@ -32,8 +32,7 @@ void Basic::Mainloop(){
 
 					XConfigureWindow(display_, event_.xconfigurerequest.window, event_.xconfigurerequest.value_mask, &changes);
 				
-				}				
-	
+				}
 
 				break;
 
@@ -69,7 +68,7 @@ void Basic::Mainloop(){
 					}
 				
 				}else if (!(strcmp((char*)textProp.value, "Mozilla Firefox"))){
-					
+				
 					unsigned char* fuckspotify = (unsigned char*) "firefox";
 					textProp.value = (unsigned char*) fuckspotify;
 					textProp.encoding = XInternAtom(display_, "WM_NAME", true);
@@ -136,8 +135,9 @@ void Basic::Mainloop(){
 					//XAddToSaveSet(display_, event_.xmaprequest.window);
 
 				//}
-				XGrabButton(display_, AnyButton, AnyModifier, newFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);	
-
+				
+				// Without this you dont get button events when clicking clients. Necessitates an XAllowEvents in the button press loop to forward the events to the clients. Eventually will want to grab the keyboard as well to allow for the addition of general keyboard shortcuts.  
+				XGrabButton(display_, AnyButton, AnyModifier, newFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);
 				break;
 
 			case UnmapNotify:
@@ -221,7 +221,7 @@ void Basic::Mainloop(){
 
 					}else if (dropIndex_[event_.xbutton.window] == 1){
 					
-						std::system("xterm -g 94x23+100+75 -bg black -fg blue&");
+						std::system("cd /root;xterm -g 94x23+100+75 -bg black -fg blue&");
 
 					}else if(dropIndex_[event_.xbutton.window] == 2){
 
