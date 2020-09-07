@@ -304,7 +304,7 @@ void Basic::MaximizeWindow(Window window){
 		
 		if (i){
 			
-			XMoveWindow(display_, subWindows[i], DISPLAY_WIDTH - 30, 4);
+			XMoveWindow(display_, subWindows[i], DISPLAY_WIDTH - (30 * i), 4);
 
 		}else{
 

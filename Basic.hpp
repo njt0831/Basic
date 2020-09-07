@@ -41,6 +41,7 @@ class Basic {
 		std::unordered_map<Window, Window> frameKill_;
 		std::unordered_map<Window, int> dropIndex_;
 		std::unordered_map<Window, Pixmap> winMap_;
+		std::unordered_map<Window, Window> minClient_;
 
 		Window dropWindows[DESKTOP_DROPDOWN_OPTION_COUNT];
 
@@ -61,14 +62,20 @@ class Basic {
 		Cursor cursor;
 		XEvent sendEvent;
 	
+		// TODO Refactor entire WM to prevent the need for this type of stupid bullshit
+		int x_back, y_back;
+		unsigned int h_back, w_back, d_back, bw_back;
+		Window rootBack;
+
 		//TODO figure out the actual number needed for these and name appropriately
-		Window frame, newFrame, closeButton, eventsFrame, temp, dropdown, client;
+		Window frame, newFrame, closeButton, eventsFrame, temp, dropdown, client, minimizeButton;
 		Pixmap curMap, backgroundMap, intermediate;
 		char* frontData;
 		char* backData;
 		char* prop_return;
 		XClassHint winClass;
 		XTextProperty textProp;
+		XWMHints* hints;
 		
 		// Save set?  
 		//std::Set saveSet_<Window>;

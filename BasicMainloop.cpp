@@ -103,20 +103,25 @@ void Basic::Mainloop(){
 
 				newFrame = XCreateSimpleWindow(display_, root_, winAtt.x, winAtt.y, winAtt.width, winAtt.height + FRAME_TITLE_BAR_WIDTH, FRAME_BORDER_WIDTH, FRAME_BORDER_COLOR, FRAME_COLOR);
 				closeButton = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);
-	
+				minimizeButton = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);	
+
 				XSelectInput(display_, newFrame, SubstructureRedirectMask | SubstructureNotifyMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
 				XSelectInput(display_, closeButton, ButtonPressMask);		
+				XSelectInput(display_, minimizeButton, ButtonPressMask);
 
 				XReparentWindow(display_, event_.xmaprequest.window, newFrame, 0, FRAME_TITLE_BAR_WIDTH);
 				XReparentWindow(display_, closeButton, newFrame, winAtt.width - 25, 4);	
-	
+				XReparentWindow(display_, minimizeButton, newFrame, winAtt.width - 50, 4);
+
 				XMapWindow(display_, newFrame);	
 				XMapWindow(display_, closeButton);
+				XMapWindow(display_, minimizeButton);
 				XMapWindow(display_, event_.xmaprequest.window);
 				XMoveWindow(display_, event_.xmaprequest.window, 0, FRAME_TITLE_BAR_WIDTH); 
 
 				LoadResource("/root/Basic/resources/utilities/close.png", closeButton, 20, 12);
-				
+				// Load Minimize button resource here
+
 				XSetWMName(display_, newFrame, &textProp);
 
 				setWinAtt.backing_store = 2;
@@ -127,6 +132,7 @@ void Basic::Mainloop(){
 				frameClient_[newFrame] = event_.xmaprequest.window;
 				killClient_[closeButton] = event_.xmaprequest.window;
 				frameKill_[newFrame] = closeButton;
+				minClient_[minimizeButton] = event_.xmaprequest.window;
 				
 				// Why do I even implement the save set?
 				//if (!saveSet_.count(xmaprequest.window)){
@@ -159,8 +165,8 @@ void Basic::Mainloop(){
 				clientFrame_.erase(event_.xunmap.window);
 				frameClient_.erase(frame);
 				killClient_.erase(frameKill_[event_.xunmap.window]);
+				minClient_.erase(frameKill_[event_.xunmap.window]);
 				frameKill_.erase(frame);
-
 				break;
 
 			case ButtonPress:
@@ -178,21 +184,39 @@ void Basic::Mainloop(){
 			       		// fprintf(f, "Killing: %lld\n", event_.xbutton.window);
 					// Deal with the case where a popup window prompts the user
 
+				}else if (minClient_.count(event_.xbutton.window)){
+
+					fprintf(f, "attempting to iconify\n");
+					hints = XGetWMHints(display_, minClient_[event_.xbutton.window]);
+					
+					XGetGeometry(display_, hints->icon_pixmap, &rootBack, &x_back, &y_back, &w_back, &h_back, &bw_back, &d_back);
+					newFrame = XCreateSimpleWindow(display_, root_, x_back, y_back, w_back, h_back, 0, FRAME_BORDER_COLOR, FRAME_COLOR);
+					
+					XSetWindowBackgroundPixmap(display_, newFrame, hints->icon_pixmap);
+					XMapWindow(display_, newFrame);
+					XUnmapWindow(display_, minClient_[event_.xbutton.window]);
+				
+					
+				
 				}else if ((event_.xbutton.window != root_) && (!dropIndex_.count(event_.xbutton.window))){
 				
+					XGetWindowAttributes(display_, event_.xbutton.window, &winAtt);
+
 					if (clientFrame_.count(event_.xbutton.window)){
 						
 						frame = clientFrame_[event_.xbutton.window];
 						XSetInputFocus(display_, frame, RevertToParent, CurrentTime);
 						XRaiseWindow(display_, frame);	
-
-					}else{
-
+					
+					// This is cancer find a better way to deal with the fact that parent events appear first
+					}else if (!((((event_.xbutton.x > winAtt.width - 25) && (event_.xbutton.x < winAtt.width - 5)) && ((event_.xbutton.y > 4) && (event_.xbutton.y < 16)) ) || (((event_.xbutton.x > winAtt.width - 50) && (event_.xbutton.x < winAtt.width - 30)) && ((event_.xbutton.y > 4) && (event_.xbutton.y < 16))))){
+						
 						XSetInputFocus(display_, event_.xbutton.window, RevertToParent, CurrentTime);
 						XRaiseWindow(display_, event_.xbutton.window);
 
 						XGetWindowAttributes(display_, event_.xbutton.window, &winAtt);
-						SetGrabState(winAtt, event_.xbutton);
+						SetGrabState(winAtt, event_.xbutton);		
+						
 					
 					}
 
