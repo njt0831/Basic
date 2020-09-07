@@ -2,6 +2,8 @@
 
 int main(){
 
+	printf("henlo");
+
 	Basic windowManager = Basic::Create();
 	windowManager.Mainloop();
 
