@@ -144,7 +144,7 @@ int main(int argc, char** argv){
 		
 				if (i){
 			
-					XMoveWindow(display, subWindows[i], (DISPLAY_WIDTH - FRAME_TITLE_BAR_WIDTH - 3) * i, 4);
+					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH - ((FRAME_TITLE_BAR_WIDTH + 4) * i), 4);
 
 				}else{
 

@@ -47,6 +47,19 @@ void Basic::Mainloop(){
 				XGetWMName(display_, event_.xmaprequest.window, &textProp);
 				XGetClassHint(display_, event_.xmaprequest.window, &winClass);
 				XGetWindowAttributes(display_, event_.xmaprequest.window, &winAtt);
+				
+				hints = XGetWMHints(display_, event_.xmaprequest.window);
+
+				//newFrame = 0;
+				//XGetTransientForHint(display_, event_.xmaprequest.window, &newFrame);
+
+				if (!hints){
+					
+					XMapWindow(display_, event_.xmaprequest.window);
+					break;
+					
+				}
+					
 
 				// Fix this when it matters
 				// Some clients wont want to be parented so they dont set their WM_NAME property			
@@ -186,7 +199,6 @@ void Basic::Mainloop(){
 
 				}else if (minClient_.count(event_.xbutton.window)){
 
-					fprintf(f, "attempting to iconify\n");
 					hints = XGetWMHints(display_, minClient_[event_.xbutton.window]);
 					
 					XGetGeometry(display_, hints->icon_pixmap, &rootBack, &x_back, &y_back, &w_back, &h_back, &bw_back, &d_back);
@@ -195,8 +207,6 @@ void Basic::Mainloop(){
 					XSetWindowBackgroundPixmap(display_, newFrame, hints->icon_pixmap);
 					XMapWindow(display_, newFrame);
 					XUnmapWindow(display_, minClient_[event_.xbutton.window]);
-				
-					
 				
 				}else if ((event_.xbutton.window != root_) && (!dropIndex_.count(event_.xbutton.window))){
 				
