@@ -19,8 +19,11 @@ extern "C"{
 class Basic {
 
 	public:
+		
+		// Constructor
+		static Basic Basic();
 
-		static Basic Create();
+		// Event Handlers
 		void handleConfigureRequest(XConfigureRequestEvent ev);
 		void handleMapRequest(XMapEvent ev);
 		void handleButtonPress(XButtonPressedEvent ev);
@@ -29,10 +32,23 @@ class Basic {
 		void handleMotionNotify(XPointerMovedEvent ev);
 		void handleEnterNotify(XEnterWindowEvent ev);
 		void handleLeaveNotify(XLeaveWindowEvent ev);
+		
+		// Something Something internal state update I dont remember
 		void checkAction();
 		XEvent event_;
 
 	private:
+		
+		Display* display_;
+		Window root_;
 
-			
+		// Window maps to relate clients, frames, and frame action windows
+		client-frame_ = std::unordered_map<Window, Window>;
+
+
+
+		// Temporary variables used during event handling
+		XWindowChanges tempWindowChanges;
+		
+
 	
