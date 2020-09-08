@@ -12,18 +12,18 @@ void Basic::handleConfigureRequest(XConfigureRequestEvent ev){
 	tempWindowChanges.sibling = ev.xconfigurerequest.above;
 	tempWindowChanges.stack_mode = ev.xconfigurerequest.detail;	
 
-	if (clientFrame_.count(event_.xconfigurerequest.window)){
-
-		frame = clientFrame_[event_.xconfigurerequest.window];
-		XGetWindowAttributes(display_, frame, &winAtt);
-
-		XMoveWindow(display_, event_.xconfigurerequest.window, 0, FRAME_TITLE_BAR_WIDTH);
-		XResizeWindow(display_, event_.xconfigurerequest.window, winAtt.width, winAtt.height - FRAME_TITLE_BAR_WIDTH + FRAME_BORDER_WIDTH);
+	if (client-frame_.count(ev.xconfigurerequest.window)){
+		
+		tempWindow = client-frame_[ev_.xconfigurerequest.window];
+		XGetWindowAttributes(display_, tempWindow, &tempWindowAttributes);
+		
+		XMoveWindow(display_, ev.xconfigurerequest.window, 0, FRAME_TITLE_BAR_WIDTH);
+		XResizeWindow(display_, ev.xconfigurerequest.window, tempWindowAttributes.width, tempWindowAttributes.height - FRAME_TITLE_BAR_WIDTH + FRAME_BORDER_WIDTH);
 
 	}else{
 
-		XConfigureWindow(display_, event_.xconfigurerequest.window, event_.xconfigurerequest.value_mask, &changes);
-				
+		XConfigureWindow(display_, ev.xconfigurerequest.window, ev.xconfigurerequest.value_mask, &tempWindowChanges);
+		
 	}
 
 }

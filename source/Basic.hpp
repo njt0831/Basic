@@ -49,6 +49,7 @@ class Basic {
 
 		// Temporary variables used during event handling
 		XWindowChanges tempWindowChanges;
-		
+		Window tempWindow, 
+		XWindowAttributes tempWindowAttributes,
 
 	
