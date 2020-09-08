@@ -99,7 +99,8 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	close-client_[tempWindowClose] = ev.xmaprequest.window;
 	frame-close_[tempWindowFrame] = tempWindowClose;
 	minimize-client_[tempWindowMinimize] = ev.xmaprequest.window;
-				
+	client-minimize_[ev.xmaprequest.window] = tempWindowMinimize;
+
 	// Without this you dont get button events when clicking clients. Necessitates an XAllowEvents in the button press loop to forward the events to the clients. Eventually will want to grab the keyboard as well to allow for the addition of general keyboard shortcuts.  
 	XGrabButton(display_, AnyButton, AnyModifier, tempWindowFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);
 

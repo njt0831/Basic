@@ -44,12 +44,17 @@ class Basic {
 
 		// Window maps to relate clients, frames, and frame action windows
 		client-frame_ = std::unordered_map<Window, Window>;
-
-
+		frame-client_ = std::unordered_map<Window, Window>;
+		close-client_ = std::unordered_map<Window, Window>;
+		frame-close_ = std::unordered_map<Window, Window>;
+		minimize-client_ = std::unordered_map<Window, Window>;
+		client-minimize_ = std::unordered_map<Window, Window>;
 
 		// Temporary variables used during event handling
 		XWindowChanges tempWindowChanges;
-		Window tempWindow, 
-		XWindowAttributes tempWindowAttributes,
-
-	
+		Window tempWindow, tempWindowFrame, tempWindowClose, tempWindowMinimize;
+		XWindowAttributes tempWindowAttributes;
+		XSetWindowAttributes tempSetWindowAttributes;
+		XTextProperty tempTextProperty;
+		XClassHint tempClassHint;
+		XWMHints tempWMHints;
