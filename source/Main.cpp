@@ -7,6 +7,8 @@ int main(){
 	Basic* basic = new Basic();
 	XEvent event_;
 
+	std::system("xterm -g 94x23+100+75 -bg black -fg blue&");
+
 	while (1){
 		
 		XNextEvent(basic->display_, &event_);
