@@ -16,4 +16,5 @@ const std::string DESKTOP_DROPDOWN_OPTIONS[DESKTOP_DROPDOWN_OPTION_COUNT] = {
 	"Open Terminal",
 	"Test",
 	"Kill"
+
 };

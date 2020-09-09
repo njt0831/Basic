@@ -1,7 +1,6 @@
-#include "Basic.hpp"
+#include "../Basic.hpp"
 
-void Basic::handleLeaveNotify(XLeaveNotifyEvent ev){
+void Basic::handleLeaveNotify(XLeaveWindowEvent ev){
 
-	return;
 
 }

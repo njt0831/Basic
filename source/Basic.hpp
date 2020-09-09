@@ -1,5 +1,6 @@
 #include "WindowConstants.hpp"
 #include <opencv4/opencv2/core/core.hpp>
+#include <opencv4/opencv2/highgui/highgui.hpp>
 #include <unordered_map>
 #include <limits.h>
 #include <filesystem>
@@ -21,11 +22,11 @@ class Basic {
 	public:
 		
 		// Constructor
-		static Basic Basic();
+		Basic();
 
 		// Event Handlers
 		void handleConfigureRequest(XConfigureRequestEvent ev);
-		void handleMapRequest(XMapEvent ev);
+		void handleMapRequest(XMapRequestEvent ev);
 		void handleButtonPress(XButtonPressedEvent ev);
 		void handleButtonRelease(XButtonReleasedEvent ev);
 		void handleUnmapNotify(XUnmapEvent ev);
@@ -33,22 +34,18 @@ class Basic {
 		void handleEnterNotify(XEnterWindowEvent ev);
 		void handleLeaveNotify(XLeaveWindowEvent ev);
 		
-		// Something Something internal state update I dont remember
-		void checkAction();
-		XEvent event_;
-
-	private:
-		
 		Display* display_;
 		Window root_;
 
+	private:	
+
 		// Window maps to relate clients, frames, and frame action windows
-		client-frame_ = std::unordered_map<Window, Window>;
-		frame-client_ = std::unordered_map<Window, Window>;
-		close-client_ = std::unordered_map<Window, Window>;
-		frame-close_ = std::unordered_map<Window, Window>;
-		minimize-client_ = std::unordered_map<Window, Window>;
-		client-minimize_ = std::unordered_map<Window, Window>;
+		std::unordered_map<Window, Window> client_frame_;
+		std::unordered_map<Window, Window> frame_client_;
+		std::unordered_map<Window, Window> close_client_;
+		std::unordered_map<Window, Window> frame_close_;
+		std::unordered_map<Window, Window> minimize_client_;
+		std::unordered_map<Window, Window> client_minimize_;
 
 		// Temporary variables used during event handling
 		XWindowChanges tempWindowChanges;
@@ -57,4 +54,12 @@ class Basic {
 		XSetWindowAttributes tempSetWindowAttributes;
 		XTextProperty tempTextProperty;
 		XClassHint tempClassHint;
-		XWMHints tempWMHints;
+		XWMHints *tempWMHints;
+		Cursor cursor;
+
+		// Log file object
+		FILE *f;
+
+
+
+};	

@@ -4,53 +4,53 @@
 
 int main(){
 
-	Basic basic = Basic::Create();
-	basic.Initialize();
+	Basic* basic = new Basic();
+	XEvent event_;
 
 	while (1){
 		
-		XNextEvent(basic.display_, &basic.event_);
+		XNextEvent(basic->display_, &event_);
 
 		switch (event_.type){
 
 			case ConfigureRequest:
 				
-				basic.handleConfigureRequest();
+				basic->handleConfigureRequest(event_.xconfigurerequest);
 				break;
 
 			case MapRequest:
 
-				basic.handleMapRequest();
+				basic->handleMapRequest(event_.xmaprequest);
 				break;
 
 			case UnmapNotify:
 
-				basic.handleUnmapNotify();
+				basic->handleUnmapNotify(event_.xunmap);
 				break;
 
 			case ButtonPress:
 
-				basic.handleButtonPress();
+				basic->handleButtonPress(event_.xbutton);
 				break;
 
 			case ButtonRelease:
 
-				basic.handleButtonRelease();
+				basic->handleButtonRelease(event_.xbutton);
 				break;
 
 			case MotionNotify:
 
-				basic.handleMotionNotify();
+				basic->handleMotionNotify(event_.xmotion);
 				break;
 
 			case EnterNotify:
 
-				basic.handleEnterNotify();
+				basic->handleEnterNotify(event_.xcrossing);
 				break;
 
 			case LeaveNotify:
 
-				basic.handleLeaveNotify();
+				basic->handleLeaveNotify(event_.xcrossing);
 				break;
 
 	 		default:
@@ -58,8 +58,6 @@ int main(){
 				break;
 
 		}
-
-		basic.Action();
 	
 	}
 

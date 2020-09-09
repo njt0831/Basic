@@ -1,26 +1,26 @@
-#include "Basic.hpp"
+#include "../Basic.hpp"
 
-void Basic::handleUnmapNotify(XUnmapNotifyEvent ev){
+void Basic::handleUnmapNotify(XUnmapEvent ev){
 
-	if (!(client-frame_.count(ev.xunmap.window)) || (ev.xunmap.event == root_) || frame-client_.count(ev.xunmap.window) || close-client_.count(ev.xunmap.window)){return;}
+	if (!(client_frame_.count(ev.window)) || (ev.event == root_) || frame_client_.count(ev.window) || close_client_.count(ev.window)){return;}
 
-	tempWindow = client-frame_[ev.xunmap.window];
+	tempWindow = client_frame_[ev.window];
 
-	if (mouseHook && hookWin == tempWindow){
+	//if (mouseHook && hookWin == tempWindow){
 		
-		mouseHook = 0;
-				
-	}
+	//	mouseHook = 0;
+		
+	//}
 
 	XUnmapWindow(display_, tempWindow);
-	XDestroyWindow(display_, frame-close_[tempWindow]);
+	XDestroyWindow(display_, frame_close_[tempWindow]);
 	XDestroyWindow(display_, tempWindow);
 
-	client-frame_.erase(ev.xunmap.window);
-	frame-client_.erase(tempWindow);
-	close-client_.erase(frame-close_[tempWindow]);
-	minimize-client_.erase(client-minimize_[ev.xunmap.window]);
-	client-minimize_.erase(ev.xunmap.window);
-	frame-close_.erase(tempWindow);
+	client_frame_.erase(ev.window);
+	frame_client_.erase(tempWindow);
+	close_client_.erase(frame_close_[tempWindow]);
+	minimize_client_.erase(client_minimize_[ev.window]);
+	client_minimize_.erase(ev.window);
+	frame_close_.erase(tempWindow);
 	
 }

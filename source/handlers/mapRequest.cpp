@@ -1,22 +1,22 @@
-#include "Basic.hpp"
+#include "../Basic.hpp"
 
 void Basic::handleMapRequest(XMapRequestEvent ev){
 
-	if (client-frame_.count(ev.xmaprequest.window)){
+	if (client_frame_.count(ev.window)){
 			
 		return;
 				
 	}
 
-	XGetWMName(display_, ev.xmaprequest.window, &tempTextProperty);
-	XGetClassHint(display_, ev.xmaprequest.window, &tempClassHint);
-	XGetWindowAttributes(display_, event_.xmaprequest.window, &tempWindowAttributes);
+	XGetWMName(display_, ev.window, &tempTextProperty);
+	XGetClassHint(display_, ev.window, &tempClassHint);
+	XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
 				
-	tempWMHints = XGetWMHints(display_, ev.xmaprequest.window);
+	tempWMHints = XGetWMHints(display_, ev.window);
 
 	if (!tempWMHints){
 		
-		XMapWindow(display_, ev.xmaprequest.window);
+		XMapWindow(display_, ev.window);
 		return;
 	}
 				
@@ -52,7 +52,7 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 
 	if (!(strcmp((char*)tempTextProperty.value, "Steam")) || !(strcmp((char*)tempTextProperty.value, "Rocket League"))){
 					
-		XMapWindow(display_, ev.xmaprequest.window);
+		XMapWindow(display_, ev.window);
 		return;
 	
 	}
@@ -61,7 +61,7 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 
 	if (tempWindowAttributes.x < 0 || tempWindowAttributes.y < 0 || tempWindowAttributes.y > 1080 or tempWindowAttributes.x > 1920){
 					
-		XMoveWindow(display_, ev.xmaprequest.window, 0, 0);
+		XMoveWindow(display_, ev.window, 0, 0);
 		tempWindowAttributes.x = 0; 
 		tempWindowAttributes.y = 0;
 	
@@ -75,31 +75,31 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	XSelectInput(display_, tempWindowClose, ButtonPressMask);		
 	XSelectInput(display_, tempWindowMinimize, ButtonPressMask);
 	
-	XReparentWindow(display_, ev.xmaprequest.window, tempWindowFrame, 0, FRAME_TITLE_BAR_WIDTH);
+	XReparentWindow(display_, ev.window, tempWindowFrame, 0, FRAME_TITLE_BAR_WIDTH);
 	XReparentWindow(display_, tempWindowClose, tempWindowFrame, tempWindowAttributes.width - 25, 4);	
-	XReparentWindow(display_, tempWindowMinimize, tempWindowFrame, winAtt.width - 50, 4);
+	XReparentWindow(display_, tempWindowMinimize, tempWindowFrame, tempWindowAttributes.width - 50, 4);
 
 	XMapWindow(display_, tempWindowFrame);
 	XMapWindow(display_, tempWindowClose);
 	XMapWindow(display_, tempWindowMinimize);
-	XMapWindow(display_, ev.xmaprequest.window);
-	XMoveWindow(display_, ev.xmaprequest.window, 0, FRAME_TITLE_BAR_WIDTH);
+	XMapWindow(display_, ev.window);
+	XMoveWindow(display_, ev.window, 0, FRAME_TITLE_BAR_WIDTH);
 	
-	LoadResource("/root/Basic/resources/utilities/close.png", tempWindowClose, 20, 12);
+	//LoadResource("/root/Basic/resources/utilities/close.png", tempWindowClose, 20, 12);
 	// Load Minimize button resource here
 
 	XSetWMName(display_, tempWindowFrame, &tempTextProperty);
 	
 	tempSetWindowAttributes.backing_store = 2;
 	XChangeWindowAttributes(display_, tempWindowFrame, CWBackingStore, &tempSetWindowAttributes);
-	XDrawString(display_, newFrame, XDefaultGC(display_, DefaultScreen(display_)), FRAME_BORDER_WIDTH, (int) FRAME_TITLE_BAR_WIDTH / 2, (char*) tempTextProperty.value, strlen((char*) tempTextProperty.value));
+	XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), FRAME_BORDER_WIDTH, (int) FRAME_TITLE_BAR_WIDTH / 2, (char*) tempTextProperty.value, strlen((char*) tempTextProperty.value));
 
-	client-frame_[ev.xmaprequest.window] = tempWindowFrame;
-	frame-client_[tempWindowFrame] = ev.xmaprequest.window;
-	close-client_[tempWindowClose] = ev.xmaprequest.window;
-	frame-close_[tempWindowFrame] = tempWindowClose;
-	minimize-client_[tempWindowMinimize] = ev.xmaprequest.window;
-	client-minimize_[ev.xmaprequest.window] = tempWindowMinimize;
+	client_frame_[ev.window] = tempWindowFrame;
+	frame_client_[tempWindowFrame] = ev.window;
+	close_client_[tempWindowClose] = ev.window;
+	frame_close_[tempWindowFrame] = tempWindowClose;
+	minimize_client_[tempWindowMinimize] = ev.window;
+	client_minimize_[ev.window] = tempWindowMinimize;
 
 	// Without this you dont get button events when clicking clients. Necessitates an XAllowEvents in the button press loop to forward the events to the clients. Eventually will want to grab the keyboard as well to allow for the addition of general keyboard shortcuts.  
 	XGrabButton(display_, AnyButton, AnyModifier, tempWindowFrame, false, ButtonPressMask | ButtonReleaseMask, GrabModeSync, GrabModeAsync, None, None);
