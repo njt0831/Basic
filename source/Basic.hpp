@@ -1,4 +1,5 @@
-#include "./utils/WindowConstants.hpp"
+#include "./utils/windowConstants.hpp"
+#include "./utils/windowUtilities.hpp"
 #include <opencv4/opencv2/core/core.hpp>
 #include <opencv4/opencv2/highgui/highgui.hpp>
 #include <unordered_map>
@@ -9,6 +10,7 @@
 #include <unistd.h>
 #include <chrono>
 #include <ctime>
+
 
 extern "C"{
 #include <X11/Xlib.h>
@@ -55,13 +57,14 @@ class Basic {
 		XTextProperty tempTextProperty;
 		XClassHint tempClassHint;
 		XWMHints *tempWMHints;
-		Cursor cursor;
-
-		// Frame hookingu 
+		Cursor cursor; 
+		
+		// Frame hooking 
 		Window hookWin;
 		int hookXOffset;
 		int hookYOffset;
 
+		std::vector<const char*> backgrounds;
 
 		// Log file object
 		FILE *f;
