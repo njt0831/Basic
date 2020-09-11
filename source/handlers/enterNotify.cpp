@@ -3,5 +3,7 @@
 void Basic::handleEnterNotify(XEnterWindowEvent ev){
 	
 	
+	fprintf(f, "Entering...");
+
 
 }

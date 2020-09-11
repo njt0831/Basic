@@ -1,4 +1,4 @@
-#include "WindowConstants.hpp"
+#include "./utils/WindowConstants.hpp"
 #include <opencv4/opencv2/core/core.hpp>
 #include <opencv4/opencv2/highgui/highgui.hpp>
 #include <unordered_map>
@@ -56,6 +56,12 @@ class Basic {
 		XClassHint tempClassHint;
 		XWMHints *tempWMHints;
 		Cursor cursor;
+
+		// Frame hookingu 
+		Window hookWin;
+		int hookXOffset;
+		int hookYOffset;
+
 
 		// Log file object
 		FILE *f;
