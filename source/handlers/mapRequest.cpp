@@ -85,7 +85,7 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	XMapWindow(display_, ev.window);
 	XMoveWindow(display_, ev.window, 0, FRAME_TITLE_BAR_WIDTH);
 	
-	//LoadResource("/root/Basic/resources/utilities/close.png", tempWindowClose, 20, 12);
+	loadResource(display_, root_, "/root/Basic/resources/utilities/close.png", tempWindowClose, 20, 12);
 	// Load Minimize button resource here
 
 	XSetWMName(display_, tempWindowFrame, &tempTextProperty);
