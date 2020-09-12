@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <chrono>
 #include <ctime>
-
+#include <vector>
 
 extern "C"{
 #include <X11/Xlib.h>
@@ -57,14 +57,15 @@ class Basic {
 		XTextProperty tempTextProperty;
 		XClassHint tempClassHint;
 		XWMHints *tempWMHints;
-		Cursor cursor; 
+		Cursor cursor;
+		XEvent tempEvent;
 		
 		// Frame hooking 
 		Window hookWin;
 		int hookXOffset;
 		int hookYOffset;
 
-		std::vector<const char*> backgrounds;
+		std::vector<std::string> backgrounds;
 
 		// Log file object
 		FILE *f;
