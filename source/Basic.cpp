@@ -17,7 +17,7 @@ Basic::Basic(){
 		backgrounds.push_back(file.path().string());
 	
 	}
-	
+
 	// Load a random desktop background
 	loadResource(display_, root_, backgrounds[rand() % backgrounds.size()].c_str(), root_, 1920, 1080);
 

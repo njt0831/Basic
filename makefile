@@ -1,8 +1,29 @@
-source = ./source/Basic.cpp ./source/utils/windowUtilities.cpp ./source/handlers/buttonPress.cpp ./source/handlers/buttonRelease.cpp ./source/handlers/configureRequest.cpp ./source/handlers/enterNotify.cpp ./source/handlers/leaveNotify.cpp ./source/handlers/mapRequest.cpp ./source/handlers/motionNotify.cpp ./source/handlers/unmapNotify.cpp ./source/Main.cpp
-flags = -lX11 -lXcursor `pkg-config --cflags --libs opencv4` -std=c++17
-executables = basic
+handlers = buttonPress.o buttonRelease.o configureRequest.o leaveNotify.o motionNotify.o enterNotify.o mapRequest.o unmapNotify.o
+utils = windowUtilities.o
+main = Basic.o Main.o
 
-all: $(executables)
+objects = $(handlers) $(utils) $(main)
 
-basic : $(source)
-	g++ $(source) -o /bin/Basic $(flags)
+flags = -lX11 -lXcursor `pkg-config --cflags --libs opencv4` -std=c++17 -I./source/headers
+
+all: Basic
+
+$(handlers) : %.o: ./source/handlers/%.cpp
+	g++ -c $< -o ./build/$@ $(flags)
+
+$(utils) : %.o: ./source/utils/%.cpp
+	g++ -c $< -o ./build/$@ $(flags)
+
+$(main) : %.o: ./source/%.cpp
+	g++ -c $< -o ./build/$@ $(flags)
+
+
+Basic : $(objects)
+	g++ ./build/* -o ./build/Basic $(flags)
+
+install:
+	@cp -f ./build/Basic /bin/Basic
+
+clean:
+	@rm -f ./build/*
+

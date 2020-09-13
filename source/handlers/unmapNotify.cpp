@@ -1,4 +1,4 @@
-#include "../Basic.hpp"
+#include "Basic.hpp"
 
 void Basic::handleUnmapNotify(XUnmapEvent ev){
 
@@ -6,11 +6,13 @@ void Basic::handleUnmapNotify(XUnmapEvent ev){
 
 	tempWindow = client_frame_[ev.window];
 
-	//if (mouseHook && hookWin == tempWindow){
+	if (hookWin == tempWindow){
 		
-	//	mouseHook = 0;
+		hookWin = 0;
+		hookXOffset = 0;
+		hookYOffset = 0;
 		
-	//}
+	}
 
 	XUnmapWindow(display_, tempWindow);
 	XDestroyWindow(display_, frame_close_[tempWindow]);

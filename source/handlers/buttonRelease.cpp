@@ -1,4 +1,4 @@
-#include "../Basic.hpp"
+#include "Basic.hpp"
 
 void Basic::handleButtonRelease(XButtonReleasedEvent ev){
 

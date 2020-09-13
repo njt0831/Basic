@@ -1,5 +1,5 @@
-#include "./utils/windowConstants.hpp"
-#include "./utils/windowUtilities.hpp"
+#include "windowConstants.hpp"
+#include "windowUtilities.hpp"
 #include <opencv4/opencv2/core/core.hpp>
 #include <opencv4/opencv2/highgui/highgui.hpp>
 #include <unordered_map>
@@ -11,13 +11,10 @@
 #include <chrono>
 #include <ctime>
 #include <vector>
-
-extern "C"{
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/Xcursor/Xcursor.h>
-}
 
 class Basic {
 
@@ -59,7 +56,10 @@ class Basic {
 		XWMHints *tempWMHints;
 		Cursor cursor;
 		XEvent tempEvent;
-		
+		int x_back, y_back;
+		unsigned int h_back, w_back, d_back, bw_back;
+		Window root_back;
+
 		// Frame hooking 
 		Window hookWin;
 		int hookXOffset;

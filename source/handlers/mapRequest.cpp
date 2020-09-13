@@ -1,64 +1,27 @@
-#include "../Basic.hpp"
+#include "Basic.hpp"
 
 void Basic::handleMapRequest(XMapRequestEvent ev){
 
+	// If this window already has a frame dont need to do anything
 	if (client_frame_.count(ev.window)){
-			
-		return;
-				
-	}
-
-	XGetWMName(display_, ev.window, &tempTextProperty);
-	XGetClassHint(display_, ev.window, &tempClassHint);
-	XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
-				
-	tempWMHints = XGetWMHints(display_, ev.window);
-
-	if (!tempWMHints){
 		
-		XMapWindow(display_, ev.window);
 		return;
-	}
-				
-	
-	// Fix this when it matters
-	// Some clients wont want to be parented so they dont set their WM_NAME property			
-	if (tempTextProperty.value == NULL){
-
-		if (tempClassHint.res_name == NULL){
-
-			tempClassHint.res_name = (char*) "";
-					
-		}else{
-			// Just set any Null textprop to spotify
-
-			unsigned char* fuckspotify = (unsigned char*) "spotify";
-			tempTextProperty.value = (unsigned char*) fuckspotify;
-			tempTextProperty.encoding = XInternAtom(display_, "WM_NAME", true);
-			tempTextProperty.nitems = 8;
-			tempTextProperty.format = 8;
-			
-		}
-				
-	}else if (!(strcmp((char*)tempTextProperty.value, "Mozilla Firefox"))){
-				
-		unsigned char* fuckspotify = (unsigned char*) "firefox";
-		tempTextProperty.value = (unsigned char*) fuckspotify;
-		tempTextProperty.encoding = XInternAtom(display_, "WM_NAME", true);
-		tempTextProperty.nitems = 8;
-		tempTextProperty.format = 8;
-			
-	}
-
-	if (!(strcmp((char*)tempTextProperty.value, "Steam")) || !(strcmp((char*)tempTextProperty.value, "Rocket League"))){
-					
-		XMapWindow(display_, ev.window);
-		return;
-	
+		
 	}
 	
-////////////////// Figure out how clients tell the window manager they dont want a frame so you can delete the shit above this //////////////////////////////
+	// Useful things I will use someday
+	XGetWMName(display_, ev.window, &tempTextProperty);
+	XGetClassHint(display_, ev.window, &tempClassHint);	
+	tempWMHints = XGetWMHints(display_, ev.window);
+	
+        // Still figuring out how clients tell the window manager they dont want a frame
+	// Until then everything is going to get one.
 
+
+	XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
+
+	// Check if the window asking to be mapped is located off screen
+	// If so just move to 0, 0 for now.
 	if (tempWindowAttributes.x < 0 || tempWindowAttributes.y < 0 || tempWindowAttributes.y > 1080 or tempWindowAttributes.x > 1920){
 					
 		XMoveWindow(display_, ev.window, 0, 0);
@@ -67,33 +30,41 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	
 	}
 
+	// Create the frame, close button, and minimize button
 	tempWindowFrame = XCreateSimpleWindow(display_, root_, tempWindowAttributes.x, tempWindowAttributes.y, tempWindowAttributes.width, tempWindowAttributes.height + FRAME_TITLE_BAR_WIDTH, FRAME_BORDER_WIDTH, FRAME_BORDER_COLOR, FRAME_COLOR);
 	tempWindowClose = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);
 	tempWindowMinimize = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);	
 	
+	// Select inputs for the new windows
 	XSelectInput(display_, tempWindowFrame, SubstructureRedirectMask | SubstructureNotifyMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
 	XSelectInput(display_, tempWindowClose, ButtonPressMask);		
 	XSelectInput(display_, tempWindowMinimize, ButtonPressMask);
 	
+	// Reparent the event window and close/minimize buttons to the new frame
 	XReparentWindow(display_, ev.window, tempWindowFrame, 0, FRAME_TITLE_BAR_WIDTH);
 	XReparentWindow(display_, tempWindowClose, tempWindowFrame, tempWindowAttributes.width - 25, 4);	
 	XReparentWindow(display_, tempWindowMinimize, tempWindowFrame, tempWindowAttributes.width - 50, 4);
 
+	// Map everything and move accordingly
 	XMapWindow(display_, tempWindowFrame);
 	XMapWindow(display_, tempWindowClose);
 	XMapWindow(display_, tempWindowMinimize);
 	XMapWindow(display_, ev.window);
 	XMoveWindow(display_, ev.window, 0, FRAME_TITLE_BAR_WIDTH);
 	
+	// Load the close button icon
 	loadResource(display_, root_, "/root/Basic/resources/utilities/close.png", tempWindowClose, 20, 12);
+	loadResource(display_, root_, "/root/Basic/resources/utilities/underline.png", tempWindowMinimize, 20, 12);
+	
 	// Load Minimize button resource here
 
+	// Set the WM Name property and draw the name onto the title bar
 	XSetWMName(display_, tempWindowFrame, &tempTextProperty);
-	
 	tempSetWindowAttributes.backing_store = 2;
 	XChangeWindowAttributes(display_, tempWindowFrame, CWBackingStore, &tempSetWindowAttributes);
 	XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), FRAME_BORDER_WIDTH, (int) FRAME_TITLE_BAR_WIDTH / 2, (char*) tempTextProperty.value, strlen((char*) tempTextProperty.value));
 
+	// Add all our new windows to the relationship maps
 	client_frame_[ev.window] = tempWindowFrame;
 	frame_client_[tempWindowFrame] = ev.window;
 	close_client_[tempWindowClose] = ev.window;
