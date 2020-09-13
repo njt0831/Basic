@@ -25,14 +25,28 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		XResizeWindow(display_, tempWindowFrame, 100, 100);
 		XUnmapWindow(display_, minimize_client_[ev.window]);
 	
-	}else if (!(ev.window == root_) && ev.y < FRAME_TITLE_BAR_WIDTH){
-		
-		hookWin = ev.window;
-		hookXOffset = ev.x;
-		hookYOffset = ev.y;
+	}else if(ev.window != root_){
+
+		XSetInputFocus(display_, ev.window, RevertToParent, CurrentTime);
+		XRaiseWindow(display_, ev.window);	
+	
+		if (frame_client_.count(ev.window)){
+
+			hookWin = ev.window;
+			hookXOffset = ev.x;
+			hookYOffset = ev.y;
+			XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
+			hookWidth = tempWindowAttributes.width;
+			hookHeight = tempWindowAttributes.height;
+
+			if (ev.x < 4){resizeLeft = 1;}
+			if (ev.x > hookWidth - 4){resizeRight = 1;}
+			if (ev.y > hookHeight - 4){resizeDown = 1;}
+			if (ev.y < 4){resizeUp = 1;}
+
+		}
 
 	}
-
 
 	if (ev.button == Button3){
 		

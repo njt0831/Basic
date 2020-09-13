@@ -64,12 +64,16 @@ class Basic {
 		Window hookWin;
 		int hookXOffset;
 		int hookYOffset;
+		int hookWidth;
+		int hookHeight;
+		bool resizeRight;
+		bool resizeLeft;
+		bool resizeDown;
+		bool resizeUp;
 
 		std::vector<std::string> backgrounds;
-
+		
 		// Log file object
 		FILE *f;
-
-
 
 };	

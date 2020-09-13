@@ -1,7 +1,7 @@
 #include <X11/Xlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "/root/Basic/WindowConstants.hpp"
+#include "windowConstants.hpp"
 #include <string.h>
 #include <math.h>
 #include <iostream>
@@ -144,7 +144,7 @@ int main(int argc, char** argv){
 		
 				if (i){
 			
-					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH - ((FRAME_TITLE_BAR_WIDTH + 4) * i), 4);
+					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH - (24 * i), 4);
 
 				}else{
 
@@ -163,7 +163,7 @@ int main(int argc, char** argv){
 		
 				if (i){
 			
-					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - FRAME_TITLE_BAR_WIDTH - 3, 4);
+					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - (25 * i), 4);
 
 				}else{
 					
@@ -182,7 +182,7 @@ int main(int argc, char** argv){
 		
 				if (i){
 			
-					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - FRAME_TITLE_BAR_WIDTH - 3, 4);
+					XMoveWindow(display, subWindows[i], DISPLAY_WIDTH / 2 - (25 * i) - 3, 4);
 
 				}else{
 					XMoveWindow(display, subWindows[i], 0, FRAME_TITLE_BAR_WIDTH);

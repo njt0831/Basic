@@ -6,7 +6,7 @@ objects = $(handlers) $(utils) $(main)
 
 flags = -lX11 -lXcursor `pkg-config --cflags --libs opencv4` -std=c++17 -I./source/headers
 
-all: Basic
+all: basic
 
 $(handlers) : %.o: ./source/handlers/%.cpp
 	g++ -c $< -o ./build/$@ $(flags)
@@ -18,7 +18,7 @@ $(main) : %.o: ./source/%.cpp
 	g++ -c $< -o ./build/$@ $(flags)
 
 
-Basic : $(objects)
+basic : $(objects)
 	g++ ./build/* -o ./build/Basic $(flags)
 
 install:
@@ -26,4 +26,3 @@ install:
 
 clean:
 	@rm -f ./build/*
-
