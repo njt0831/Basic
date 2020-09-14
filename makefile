@@ -4,7 +4,7 @@ main = Basic.o Main.o
 
 objects = $(handlers) $(utils) $(main)
 
-flags = -lX11 -lXcursor `pkg-config --cflags --libs opencv4` -std=c++17 -I./source/headers
+flags = -lX11 -lXext -lXcursor `pkg-config --cflags --libs opencv4` -std=c++17 -I./source/headers
 
 all: basic
 

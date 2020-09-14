@@ -14,3 +14,73 @@ void loadResource(Display* display_, Window root_, const char* resourcePath, Win
 	XFreePixmap(display_, pixmap);
 
 }
+
+void setCircular(Display* display_, Window window){
+
+	XRectangle recs[200];
+
+	XWindowAttributes windowAttributes;
+	XGetWindowAttributes(display_, window, &windowAttributes);
+       
+	if (windowAttributes.width != windowAttributes.height){
+	
+		return;
+		
+	}
+
+	int radius = windowAttributes.width / 2;
+
+	int x, y;
+
+	for(int i=0;i<radius / 2;i++){
+
+		y = sin(i * (3.14159 / radius)) * radius;
+		x = cos(i * (3.14159 / radius)) * radius;
+
+		recs[i].x = radius;
+		recs[i].y = radius;
+		recs[i].width = x;
+		recs[i].height = y;
+
+	}
+
+	for(int i=(radius / 2);i<radius;i++){
+
+		y = sin((i - (radius / 2)) * (3.14159 / radius)) * radius;
+		x = cos((i - (radius / 2)) * (3.14159 / radius)) * radius;
+
+		recs[i].x = radius - x;
+		recs[i].y = radius;
+		recs[i].width = x;
+		recs[i].height = y;
+
+	}
+
+	for(int i=radius;i<radius + (radius / 2);i++){
+
+		y = sin((i - radius) * (3.14159 / radius)) * radius;
+		x = cos((i - radius) * (3.14159 / radius)) * radius;
+
+		recs[i].x = radius;
+		recs[i].y = radius - y;
+		recs[i].width = x;
+		recs[i].height = y;
+
+	}
+
+	for(int i=(radius + (radius / 2));i<radius * 2;i++){
+
+		y = sin((i - (radius + (radius / 2))) * (3.14159 / radius)) * radius;
+		x = cos((i - (radius + (radius / 2))) * (3.14159 / radius)) * radius;
+
+		recs[i].x = radius - x;
+		recs[i].y = radius - y;
+		recs[i].width = x;
+		recs[i].height = y;
+
+	}
+
+	
+	XShapeCombineRectangles(display_, window, ShapeBounding, 0, 0, recs, windowAttributes.width, ShapeSet, 0);
+
+}

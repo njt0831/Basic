@@ -6,13 +6,22 @@ void Basic::handleMotionNotify(XPointerMovedEvent ev){
 	
 		if (resizeRight){
 			
-			// This speeds it up but not nicely, the windows lag as they are resized and events are ignored
-			XSync(display_, true);
+			XSync(display_, true);	
 
 			XResizeWindow(display_, frame_client_[ev.window], hookWidth + (ev.x - hookXOffset), hookHeight);
 			XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], hookWidth + (ev.x - hookXOffset) - 50, 4);
 			XMoveWindow(display_, frame_close_[ev.window], hookWidth + (ev.x - hookXOffset) - 25, 4);	
 			XResizeWindow(display_, ev.window, hookWidth + (ev.x - hookXOffset), hookHeight);
+
+		}else if (resizeDown){
+
+
+			XSync(display_, true);	
+
+			XResizeWindow(display_, frame_client_[ev.window], hookWidth, hookHeight + (ev.y - hookYOffset));
+			XResizeWindow(display_, ev.window, hookWidth, hookHeight + (ev.y - hookYOffset));
+
+			
 
 		}else{
 

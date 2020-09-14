@@ -11,10 +11,12 @@
 #include <chrono>
 #include <ctime>
 #include <vector>
+#include <math.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/Xcursor/Xcursor.h>
+#include <X11/extensions/shape.h>
 
 class Basic {
 
@@ -45,6 +47,10 @@ class Basic {
 		std::unordered_map<Window, Window> frame_close_;
 		std::unordered_map<Window, Window> minimize_client_;
 		std::unordered_map<Window, Window> client_minimize_;
+		
+		// Taskbar objects
+		Window taskbar;
+		Window taskButton;
 
 		// Temporary variables used during event handling
 		XWindowChanges tempWindowChanges;

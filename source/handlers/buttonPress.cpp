@@ -2,6 +2,8 @@
 
 void Basic::handleButtonPress(XButtonPressedEvent ev){
 
+	fprintf(f, "ButtonPressEvent\n");
+
 	// If this is a close button, send a WM_DELETE_WINDOW event to the corresponding client 
 	if(close_client_.count(ev.window)){
 

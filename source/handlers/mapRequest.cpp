@@ -14,6 +14,13 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	XGetClassHint(display_, ev.window, &tempClassHint);	
 	tempWMHints = XGetWMHints(display_, ev.window);
 	
+	if (!(strcmp((char*) tempTextProperty.value, "henlo"))){
+
+		XMapWindow(display_, ev.window);
+		return;
+	
+	}
+
         // Still figuring out how clients tell the window manager they dont want a frame
 	// Until then everything is going to get one.
 
@@ -32,8 +39,8 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 
 	// Create the frame, close button, and minimize button
 	tempWindowFrame = XCreateSimpleWindow(display_, root_, tempWindowAttributes.x, tempWindowAttributes.y, tempWindowAttributes.width, tempWindowAttributes.height + FRAME_TITLE_BAR_WIDTH, FRAME_BORDER_WIDTH, FRAME_BORDER_COLOR, FRAME_COLOR);
-	tempWindowClose = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);
-	tempWindowMinimize = XCreateSimpleWindow(display_, root_, 0, 0, 20, 12, 1, 0x181616, 0x363333);	
+	tempWindowClose = XCreateSimpleWindow(display_, root_, 0, 0, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT, 1, BUTTON_BACKGROUND_COLOR, FRAME_COLOR);
+	tempWindowMinimize = XCreateSimpleWindow(display_, root_, 0, 0, FRAME_BUTTON_WIDTH, FRAME_BUTTON_HEIGHT, 1, BUTTON_BACKGROUND_COLOR, FRAME_COLOR);	
 	
 	// Select inputs for the new windows
 	XSelectInput(display_, tempWindowFrame, SubstructureRedirectMask | SubstructureNotifyMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
@@ -63,6 +70,7 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	tempSetWindowAttributes.backing_store = 2;
 	XChangeWindowAttributes(display_, tempWindowFrame, CWBackingStore, &tempSetWindowAttributes);
 	XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), FRAME_BORDER_WIDTH, (int) FRAME_TITLE_BAR_WIDTH / 2, (char*) tempTextProperty.value, strlen((char*) tempTextProperty.value));
+	
 
 	// Add all our new windows to the relationship maps
 	client_frame_[ev.window] = tempWindowFrame;
