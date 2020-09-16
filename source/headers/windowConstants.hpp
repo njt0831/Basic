@@ -7,18 +7,19 @@ const int FRAME_BUTTON_WIDTH = 20;
 const int FRAME_BUTTON_HEIGHT = 12;
 const int FRAME_TITLE_BAR_WIDTH = 24;
 const int FRAME_BORDER_WIDTH = 3;
-const int DESKTOP_DROPDOWN_OPTION_COUNT = 4;
-const int DESKTOP_DROPDOWN_WIDTH = 30;
-const int DESKTOP_DROPDOWN_HIGHLIGHT_COLOR = 0x908181;
+const int START_MENU_OPTION_COUNT = 4;
+const int START_MENU_HEIGHT = 30;
+const int START_MENU_HIGHLIGHT_COLOR = 0x908181;
 const int DISPLAY_HEIGHT = 1080;
 const int DISPLAY_WIDTH = 1920;
 const int TASKBAR_HEIGHT = 40;
+const int START_MENU_WIDTH = 300;
 
-const std::string DESKTOP_DROPDOWN_OPTIONS[DESKTOP_DROPDOWN_OPTION_COUNT] = {
+const std::string START_MENU_OPTIONS[START_MENU_OPTION_COUNT] = {
 	
 	"Next Desktop Background",
 	"Open Terminal",
 	"Test",
-	"Kill"
+	"Close Display"
 
 };

@@ -4,9 +4,14 @@ void Basic::handleMotionNotify(XPointerMovedEvent ev){
 	
 	if (ev.window == hookWin){
 	
-		if (resizeRight){
-			
-			XSync(display_, true);	
+		if (resizeRight){	
+
+			if (resizeDown){
+				
+				XResizeWindow(display_, frame_client_[ev.window], hookWidth, hookHeight + (ev.y - hookYOffset));
+				XResizeWindow(display_, ev.window, hookWidth, hookHeight + (ev.y - hookYOffset));
+
+			}	
 
 			XResizeWindow(display_, frame_client_[ev.window], hookWidth + (ev.x - hookXOffset), hookHeight);
 			XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], hookWidth + (ev.x - hookXOffset) - 50, 4);
@@ -14,9 +19,6 @@ void Basic::handleMotionNotify(XPointerMovedEvent ev){
 			XResizeWindow(display_, ev.window, hookWidth + (ev.x - hookXOffset), hookHeight);
 
 		}else if (resizeDown){
-
-
-			XSync(display_, true);	
 
 			XResizeWindow(display_, frame_client_[ev.window], hookWidth, hookHeight + (ev.y - hookYOffset));
 			XResizeWindow(display_, ev.window, hookWidth, hookHeight + (ev.y - hookYOffset));

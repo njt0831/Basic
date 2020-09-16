@@ -2,10 +2,21 @@
 
 void Basic::handleButtonPress(XButtonPressedEvent ev){
 
-	fprintf(f, "ButtonPressEvent\n");
+	if (dropdown && !(drop_index_.count(ev.window))){
+
+		XDestroySubwindows(display_, dropdown);
+		XDestroyWindow(display_, dropdown);
+		dropdown = 0;
+		
+		for (unsigned int i=0; i < START_MENU_OPTION_COUNT; i++){
+								
+			drop_index_.clear();
+
+		}	
+		
 
 	// If this is a close button, send a WM_DELETE_WINDOW event to the corresponding client 
-	if(close_client_.count(ev.window)){
+	}else if (close_client_.count(ev.window)){
 
 		tempEvent.type = ClientMessage;
 		tempEvent.xclient.window = close_client_[ev.window];
@@ -27,12 +38,58 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		XResizeWindow(display_, tempWindowFrame, 100, 100);
 		XUnmapWindow(display_, minimize_client_[ev.window]);
 	
+	}else if (ev.window == taskButton){
+
+		dropdown = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT * START_MENU_OPTION_COUNT, 2, 0x000000, FRAME_COLOR);
+		XMapWindow(display_, dropdown);
+						
+		for (unsigned int i=0;i < START_MENU_OPTION_COUNT; i++){
+			
+			tempWindowFrame = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT) + (i * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT, 0, FRAME_BORDER_COLOR, FRAME_COLOR);
+			XSelectInput(display_, tempWindowFrame, ButtonPressMask | EnterWindowMask | LeaveWindowMask);
+			XReparentWindow(display_, tempWindowFrame, dropdown, 0, i * START_MENU_HEIGHT);
+			XMapWindow(display_, tempWindowFrame);
+			XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), 10, START_MENU_HEIGHT / 2 + 4, START_MENU_OPTIONS[i].c_str(), START_MENU_OPTIONS[i].length());	
+			//dropWindows[i] = tempWindowFrame;
+			drop_index_[tempWindowFrame] = i;
+			
+		}
+
+
+	
+	}else if (drop_index_.count(ev.window)){
+
+		
+		switch (drop_index_[ev.window]){
+
+			case 0:
+
+				loadResource(display_, root_, backgrounds[rand() % backgrounds.size()].c_str(), root_, 1920, 1080);
+				break;
+
+			case 1:
+
+				std::system("cd /root;xterm -g 94x23+100+75 -bg black -fg blue&");
+				break;
+
+			case 2:
+
+				break;
+
+			case 3:
+
+				fclose(f);
+				XCloseDisplay(display_);
+				break;
+		
+		}
+	
 	}else if(ev.window != root_){
 
 		XSetInputFocus(display_, ev.window, RevertToParent, CurrentTime);
 		XRaiseWindow(display_, ev.window);	
 	
-		if (frame_client_.count(ev.window)){
+		if (frame_client_.count(ev.window)){	
 
 			hookWin = ev.window;
 			hookXOffset = ev.x;
@@ -41,6 +98,9 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 			hookWidth = tempWindowAttributes.width;
 			hookHeight = tempWindowAttributes.height;
 
+			fprintf(f, "y is %i, ", ev.y);
+			fprintf(f, "hookHeight is %i\n", hookHeight);
+
 			if (ev.x < 4){resizeLeft = 1;}
 			if (ev.x > hookWidth - 4){resizeRight = 1;}
 			if (ev.y > hookHeight - 4){resizeDown = 1;}
@@ -48,12 +108,6 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 
 		}
 
-	}
-
-	if (ev.button == Button3){
-		
-		fclose(f);
-		XCloseDisplay(display_);
 	}
 
 	XAllowEvents(display_, ReplayPointer, CurrentTime);

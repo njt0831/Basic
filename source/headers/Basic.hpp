@@ -47,10 +47,15 @@ class Basic {
 		std::unordered_map<Window, Window> frame_close_;
 		std::unordered_map<Window, Window> minimize_client_;
 		std::unordered_map<Window, Window> client_minimize_;
-		
+		std::unordered_map<Window, int> drop_index_;
+
 		// Taskbar objects
 		Window taskbar;
 		Window taskButton;
+
+		// Menu objects
+		Window dropdown;
+		
 
 		// Temporary variables used during event handling
 		XWindowChanges tempWindowChanges;
