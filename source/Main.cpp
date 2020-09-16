@@ -1,12 +1,11 @@
 #include "Basic.hpp"
 #include "X11/Xlib.h"
 
-
 int main(){
 
 	Basic* basic = new Basic();
 	XEvent event_;
-
+	
 	std::system("xterm -g 94x23+100+75 -bg black -fg blue&");
 
 	while (1){

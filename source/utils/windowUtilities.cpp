@@ -80,7 +80,6 @@ void setCircular(Display* display_, Window window){
 
 	}
 
-	
 	XShapeCombineRectangles(display_, window, ShapeBounding, 0, 0, recs, windowAttributes.width, ShapeSet, 0);
 
 }

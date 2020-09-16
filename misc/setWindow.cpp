@@ -8,6 +8,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 
+
 int intFromString(char* str, int len){
 
 	int result = 0;

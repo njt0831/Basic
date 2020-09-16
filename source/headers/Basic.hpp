@@ -56,6 +56,9 @@ class Basic {
 		// Menu objects
 		Window dropdown;
 		
+		// To detect double clicks
+		std::chrono::time_point<std::chrono::system_clock> releaseTime;
+		std::chrono::duration<double> diff;
 
 		// Temporary variables used during event handling
 		XWindowChanges tempWindowChanges;
