@@ -1,5 +1,6 @@
 #include "windowUtilities.hpp"
 
+// See Basic.h for opencv explanation
 void loadResource(Display* display_, Window root_, const char* resourcePath, Window window, unsigned int width, unsigned int height){
 
 	cv::Mat img = cv::imread(resourcePath);

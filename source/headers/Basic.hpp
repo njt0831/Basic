@@ -1,7 +1,12 @@
 #include "windowConstants.hpp"
 #include "windowUtilities.hpp"
+
+// Definitely do not need opencv just to open image files
+// Only used it because I knew exactly how to do what I needed already with it
+// Eventually will refactor this dependancy away
 #include <opencv4/opencv2/core/core.hpp>
 #include <opencv4/opencv2/highgui/highgui.hpp>
+
 #include <unordered_map>
 #include <limits.h>
 #include <filesystem>
