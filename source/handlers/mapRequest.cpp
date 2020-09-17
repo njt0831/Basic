@@ -13,19 +13,16 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	XGetWMName(display_, ev.window, &tempTextProperty);
 	XGetClassHint(display_, ev.window, &tempClassHint);	
 	tempWMHints = XGetWMHints(display_, ev.window);
+
+	XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
 	
-	if (!(strcmp((char*) tempTextProperty.value, "henlo"))){
+	if (tempWindowAttributes.override_redirect){
 
 		XMapWindow(display_, ev.window);
 		return;
-	
+
 	}
 
-        // Still figuring out how clients tell the window manager they dont want a frame
-	// Until then everything is going to get one.
-
-
-	XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
 
 	// Check if the window asking to be mapped is located off screen
 	// If so just move to 0, 0 for now.

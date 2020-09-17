@@ -9,6 +9,9 @@
 #include <X11/Xatom.h>
 
 
+// This is a hacked together external client that resizes windows via their WM_NAME
+// Was written so that, coupled with a few .bashrc lines, windows could be quickly resized to full or half screen
+
 int intFromString(char* str, int len){
 
 	int result = 0;
