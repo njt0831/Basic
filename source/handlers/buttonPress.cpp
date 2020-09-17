@@ -1,21 +1,19 @@
 #include "Basic.hpp"
 
 void Basic::handleButtonPress(XButtonPressedEvent ev){
-
+	
+	// Check if the start menu is open, then close it if it wasnt the window that was clicked 
 	if (dropdown && !(drop_index_.count(ev.window))){
-
+		
 		XDestroySubwindows(display_, dropdown);
 		XDestroyWindow(display_, dropdown);
 		dropdown = 0;
+		drop_index_.clear();
 		
-		for (unsigned int i=0; i < START_MENU_OPTION_COUNT; i++){
-								
-			drop_index_.clear();
-
-		}	
+	}
 		
 
-	// If this is a close button, send a WM_DELETE_WINDOW event to the corresponding client 
+	// If this is a close button, build and send a WM_DELETE_WINDOW event to the corresponding client 
 	}else if (close_client_.count(ev.window)){
 
 		tempEvent.type = ClientMessage;
@@ -26,6 +24,8 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		tempEvent.xclient.data.l[1] = CurrentTime;
 		XSendEvent(display_, close_client_[ev.window], false, NoEventMask, &tempEvent);
 
+	// If this is a minimize button, just make an icon
+	// This functionality isnt implemented yet. Dont press the minimize button unless you want a permanent icon stuck on the display 
 	}else if (minimize_client_.count(ev.window)){
 		
 		tempWMHints = XGetWMHints(display_, minimize_client_[ev.window]);
@@ -38,7 +38,10 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		XResizeWindow(display_, tempWindowFrame, 100, 100);
 		XUnmapWindow(display_, minimize_client_[ev.window]);
 	
+	// If this is the taskbar button
 	}else if (ev.window == taskButton){
+
+		// Create the start menu, then populate it with the buttons specified in the windowConstants file
 
 		dropdown = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT * START_MENU_OPTION_COUNT, 2, 0x000000, FRAME_COLOR);
 		XMapWindow(display_, dropdown);
@@ -50,16 +53,16 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 			XReparentWindow(display_, tempWindowFrame, dropdown, 0, i * START_MENU_HEIGHT);
 			XMapWindow(display_, tempWindowFrame);
 			XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), 10, START_MENU_HEIGHT / 2 + 4, START_MENU_OPTIONS[i].c_str(), START_MENU_OPTIONS[i].length());	
-			//dropWindows[i] = tempWindowFrame;
 			drop_index_[tempWindowFrame] = i;
 			
 		}
 
 
-	
+	// If this is a start menu button
 	}else if (drop_index_.count(ev.window)){
 
 		
+		// Figure out which button it is and perform (currently maybe perform) an action
 		switch (drop_index_[ev.window]){
 
 			case 0:
@@ -84,11 +87,14 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		
 		}
 	
+	// Otherwise if this is any other window
 	}else if(ev.window != root_){
 
+		// Set the input focus and raise the window to the top of the stack
 		XSetInputFocus(display_, ev.window, RevertToParent, CurrentTime);
-		XRaiseWindow(display_, ev.window);	
-	
+		XRaiseWindow(display_, ev.window);
+
+		// If its a WM frame, then we need to set the grab state for moving/resizing it
 		if (frame_client_.count(ev.window)){	
 
 			hookWin = ev.window;
@@ -109,7 +115,7 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		}
 
 	}
-
+	
 	XAllowEvents(display_, ReplayPointer, CurrentTime);
 
 }
