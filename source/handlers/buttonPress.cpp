@@ -14,7 +14,7 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		
 
 	// If this is a close button, build and send a WM_DELETE_WINDOW event to the corresponding client 
-	}else if (close_client_.count(ev.window)){
+	if (close_client_.count(ev.window)){
 
 		tempEvent.type = ClientMessage;
 		tempEvent.xclient.window = close_client_[ev.window];
@@ -96,16 +96,16 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 
 		// If its a WM frame, then we need to set the grab state for moving/resizing it
 		if (frame_client_.count(ev.window)){	
-
+			
+			// This implementation needs to be redone
+			// Its really difficult to hook the edges of the frame right now for resizing
+			
 			hookWin = ev.window;
 			hookXOffset = ev.x;
 			hookYOffset = ev.y;
 			XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
 			hookWidth = tempWindowAttributes.width;
 			hookHeight = tempWindowAttributes.height;
-
-			fprintf(f, "y is %i, ", ev.y);
-			fprintf(f, "hookHeight is %i\n", hookHeight);
 
 			if (ev.x < 4){resizeLeft = 1;}
 			if (ev.x > hookWidth - 4){resizeRight = 1;}

@@ -46,6 +46,7 @@ Basic::Basic(){
 
 	// Initialize a log file object for debugging
 	// Importantly, it is only closed properly and subsequently logged to when the display is closed gracefully (crashed purposefully) via the start menu option
+	// Not an intelligent debug method, but works for simple things
 	f = fopen("/root/log.txt", "w");
 
 }

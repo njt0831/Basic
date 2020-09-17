@@ -15,7 +15,8 @@ void Basic::handleMapRequest(XMapRequestEvent ev){
 	tempWMHints = XGetWMHints(display_, ev.window);
 
 	XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
-	
+
+	// Does this window want any decorations?
 	if (tempWindowAttributes.override_redirect){
 
 		XMapWindow(display_, ev.window);

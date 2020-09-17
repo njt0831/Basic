@@ -1,6 +1,9 @@
 #include "Basic.hpp"
 #include "X11/Xlib.h"
 
+
+// File is by design self explanatory
+
 int main(){
 
 	Basic* basic = new Basic();

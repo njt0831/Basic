@@ -16,6 +16,10 @@ void loadResource(Display* display_, Window root_, const char* resourcePath, Win
 
 }
 
+
+// This is definitely not the best way to do this
+// Four loops becuase XShapeCombineRectangles did not understand negative widths/heights
+
 void setCircular(Display* display_, Window window){
 
 	XRectangle recs[200];
