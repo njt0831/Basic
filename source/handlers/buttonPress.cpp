@@ -35,8 +35,16 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		
 		XSetWindowBackgroundPixmap(display_, tempWindowFrame, tempWMHints->icon_pixmap);
 		XMapWindow(display_, tempWindowFrame);
-		XResizeWindow(display_, tempWindowFrame, 100, 100);
+		XSelectInput(display_, tempWindowFrame, ButtonPressMask);
+		XResizeWindow(display_, tempWindowFrame, 50, 50);
 		XUnmapWindow(display_, minimize_client_[ev.window]);
+		icon_client_[tempWindowFrame] = minimize_client_[ev.window];
+	
+	}else if (icon_client_.count(ev.window)){
+		
+		XMapWindow(display_, icon_client_[ev.window]);
+		icon_client_.erase(ev.window);
+		XDestroyWindow(display_, ev.window);
 	
 	// If this is the taskbar button
 	}else if (ev.window == taskButton){

@@ -53,6 +53,7 @@ class Basic {
 		std::unordered_map<Window, Window> minimize_client_;
 		std::unordered_map<Window, Window> client_minimize_;
 		std::unordered_map<Window, int> drop_index_;
+		std::unordered_map<Window, Window> icon_client_;
 
 		// Taskbar objects
 		Window taskbar;
