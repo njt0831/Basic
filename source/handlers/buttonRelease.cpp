@@ -26,7 +26,7 @@ void Basic::handleButtonRelease(XButtonReleasedEvent ev){
 			
 			XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
 
-			if ((tempWindowAttributes.width == DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH)) and (tempWindowAttributes.height == DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH))){
+			if ((tempWindowAttributes.width == DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH)) and (tempWindowAttributes.height == DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT)){
 
 				
 				XMoveWindow(display_, ev.window, 300, 150);
@@ -38,8 +38,8 @@ void Basic::handleButtonRelease(XButtonReleasedEvent ev){
 			}else{
 
 				XMoveWindow(display_, ev.window, 0, 0);
-				XResizeWindow(display_, ev.window, DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH));
-				XResizeWindow(display_, frame_client_[ev.window], DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH);
+				XResizeWindow(display_, ev.window, DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
+				XResizeWindow(display_, frame_client_[ev.window], DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
 				XMoveWindow(display_, frame_close_[ev.window], DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH) - 25, 4);
 				XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH) - 50, 4);
 			
