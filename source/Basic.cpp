@@ -44,9 +44,28 @@ Basic::Basic(){
 	resizeUp = 0;
 	dropdown = 0;
 
+	// Get the size of all monitors that X detected on startup. As multi-monitor support is added this will likely need to change
+	// For some reason, my attempts to store the return value of XRRGetMonitors in an XRRMonitorInfo* crashes the X server
+	// Eventually will come back to solve this, but just calling it n times is a really tiny deal
+	XRRGetMonitors(display_, root_, true, &monitorCount);
+
+	monitorWidths = new int[monitorCount];
+	monitorHeights = new int[monitorCount];
+	monitorOffsets = new int[monitorCount];
+	int sum = 0;
+
+	for(int i=0;i<monitorCount;i++){
+		
+		monitorWidths[i] = XRRGetMonitors(display_, root_, true, &monitorCount)[i].width;
+		monitorHeights[i] = XRRGetMonitors(display_, root_, true, &monitorCount)[i].height;
+			
+		monitorOffsets[i] = sum;
+		sum = sum + monitorWidths[i];
+	}
+	
 	// Initialize a log file object for debugging
 	// Importantly, it is only closed properly and subsequently logged to when the display is closed gracefully (crashed purposefully) via the start menu option
 	// Not an intelligent debug method, but works for simple things
 	f = fopen("/root/log.txt", "w");
-
+	
 }

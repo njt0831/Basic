@@ -5,6 +5,9 @@ void loadResource(Display* display_, Window root_, const char* resourcePath, Win
 
 	cv::Mat img = cv::imread(resourcePath);
 
+	//XWindowAttributes winAtts;
+	//XGetWindowAttributes(display_, window, &winAtts);
+
 	XImage* xImage = XCreateImage(display_, XDefaultVisual(display_, DefaultScreen(display_)), 24, ZPixmap, 0, (char*) img.data, width * .75, height, 32, width*3);
 	xImage->bits_per_pixel = 24;
         xImage->width = width;
@@ -19,7 +22,6 @@ void loadResource(Display* display_, Window root_, const char* resourcePath, Win
 
 // This is definitely not the best way to do this
 // Four loops becuase XShapeCombineRectangles did not understand negative widths/heights
-
 void setCircular(Display* display_, Window window){
 
 	XRectangle recs[200];
@@ -86,5 +88,22 @@ void setCircular(Display* display_, Window window){
 	}
 
 	XShapeCombineRectangles(display_, window, ShapeBounding, 0, 0, recs, windowAttributes.width, ShapeSet, 0);
+
+}
+
+// Thrown in here for now. Will likely end up refactoring away as multi-monitor support gets fleshed out
+int getMonitor(int x, int* offsets, int* widths, int nOffsets){
+
+	for(int i=0;i<nOffsets;i++){
+
+		if (x < offsets[i] + widths[i]){
+		
+			return i;
+		
+		}
+	
+	}
+
+	return -1;
 
 }

@@ -22,6 +22,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xcursor/Xcursor.h>
 #include <X11/extensions/shape.h>
+#include <X11/extensions/Xrandr.h>
 
 class Basic {
 
@@ -54,6 +55,11 @@ class Basic {
 		std::unordered_map<Window, Window> client_minimize_;
 		std::unordered_map<Window, int> drop_index_;
 		std::unordered_map<Window, Window> icon_client_;
+
+		int monitorCount;
+		int* monitorWidths;
+		int* monitorHeights;
+		int* monitorOffsets;
 
 		// Taskbar objects
 		Window taskbar;

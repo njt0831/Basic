@@ -13,47 +13,51 @@ void Basic::handleButtonRelease(XButtonReleasedEvent ev){
 		if (diff.count() < .30){
 			
 			XGetWindowAttributes(display_, ev.window, &tempWindowAttributes);
+			
+			int monitor = getMonitor(tempWindowAttributes.x + ev.x, monitorOffsets, monitorWidths, monitorCount);
+			int displayWidth = monitorWidths[monitor];
+			int displayHeight = monitorHeights[monitor];
+			int displayOffset = monitorOffsets[monitor];
 
 			if (ev.y < FRAME_TITLE_BAR_WIDTH){
 			       
-				if ((tempWindowAttributes.width == DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH)) and (tempWindowAttributes.height == DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT) and tempWindowAttributes.x == 0 and tempWindowAttributes.y == 0){
-
+				if ((tempWindowAttributes.width == displayWidth - (2 * FRAME_BORDER_WIDTH)) and (tempWindowAttributes.height == displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT) and tempWindowAttributes.x == displayOffset and tempWindowAttributes.y == 0){
 				
-					XMoveWindow(display_, ev.window, 300, 150);
+					XMoveWindow(display_, ev.window, displayOffset + 300, 150);
 					XResizeWindow(display_, ev.window, 400, 400);
 					XResizeWindow(display_, frame_client_[ev.window], 400 - (FRAME_BORDER_WIDTH), 400 - (2 * FRAME_BORDER_WIDTH));
-					XMoveWindow(display_, frame_close_[ev.window], 400 - (FRAME_BORDER_WIDTH) - 25, 4);
-					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], 400 - (FRAME_BORDER_WIDTH) - 50, 4);
+					XMoveWindow(display_, frame_close_[ev.window], displayOffset + 400 - (FRAME_BORDER_WIDTH) - 25, 4);
+					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayOffset + 400 - (FRAME_BORDER_WIDTH) - 50, 4);
 
 				}else{
 
-					XMoveWindow(display_, ev.window, 0, 0);
-					XResizeWindow(display_, ev.window, DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
-					XResizeWindow(display_, frame_client_[ev.window], DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
-					XMoveWindow(display_, frame_close_[ev.window], DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH) - 25, 4);
-					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], DISPLAY_WIDTH - (2 * FRAME_BORDER_WIDTH) - 50, 4);
-			
+					XMoveWindow(display_, ev.window, displayOffset, 0);
+					XResizeWindow(display_, ev.window, displayWidth - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
+					XResizeWindow(display_, frame_client_[ev.window], displayWidth - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
+					XMoveWindow(display_, frame_close_[ev.window], displayOffset + displayWidth - (2 * FRAME_BORDER_WIDTH) - 25, 4);
+					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayOffset + displayWidth - (2 * FRAME_BORDER_WIDTH) - 50, 4);
+					
 				}
 		
 			}else if(resizeDown){
 
-				fprintf(f, "Fuck you\n");
+				fprintf(f, "No\n");
 
 			}else if(resizeRight){
 
-				XMoveWindow(display_, ev.window, DISPLAY_WIDTH / 2, 0);
-				XResizeWindow(display_, ev.window, DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
-				XResizeWindow(display_, frame_client_[ev.window], DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
-				XMoveWindow(display_, frame_close_[ev.window], DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH) - 25, 4);
-				XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH) - 50, 4);
+				XMoveWindow(display_, ev.window, displayOffset + displayWidth / 2, 0);
+				XResizeWindow(display_, ev.window, displayWidth / 2 - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
+				XResizeWindow(display_, frame_client_[ev.window], displayWidth / 2 - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
+				XMoveWindow(display_, frame_close_[ev.window], displayOffset + displayWidth / 2 - (2 * FRAME_BORDER_WIDTH) - 25, 4);
+				XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayOffset + displayWidth / 2 - (2 * FRAME_BORDER_WIDTH) - 50, 4);
 
 			}else if (resizeLeft){
 				
-				XMoveWindow(display_, ev.window, 0, 0);
-				XResizeWindow(display_, ev.window, DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
-				XResizeWindow(display_, frame_client_[ev.window], DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH), DISPLAY_HEIGHT - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
-				XMoveWindow(display_, frame_close_[ev.window], DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH) - 25, 4);
-				XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], DISPLAY_WIDTH / 2 - (2 * FRAME_BORDER_WIDTH) - 50, 4);
+				XMoveWindow(display_, ev.window, displayOffset, 0);
+				XResizeWindow(display_, ev.window, displayWidth / 2 - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
+				XResizeWindow(display_, frame_client_[ev.window], displayWidth / 2 - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
+				XMoveWindow(display_, frame_close_[ev.window], displayOffset + displayWidth / 2 - (2 * FRAME_BORDER_WIDTH) - 25, 4);
+				XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayOffset + displayWidth / 2 - (2 * FRAME_BORDER_WIDTH) - 50, 4);
 			
 			}
 

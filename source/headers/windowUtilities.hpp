@@ -4,4 +4,5 @@
 #include <opencv4/opencv2/highgui/highgui.hpp>
 
 void loadResource(Display* display_, Window root_, const char* resourcePath, Window window, unsigned int width, unsigned int height);
-void setCircular(Display* display_, Window window); 
+void setCircular(Display* display_, Window window);
+int getMonitor(int x, int* offsets, int* widths, int nOffsets);
