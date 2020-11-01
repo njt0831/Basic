@@ -25,7 +25,7 @@ void Basic::handleButtonRelease(XButtonReleasedEvent ev){
 				
 					XMoveWindow(display_, ev.window, displayOffset + 300, 150);
 					XResizeWindow(display_, ev.window, 400, 400);
-					XResizeWindow(display_, frame_client_[ev.window], 400 - (FRAME_BORDER_WIDTH), 400 - (2 * FRAME_BORDER_WIDTH));
+					XResizeWindow(display_, frame_client_[ev.window], 400 - (FRAME_BORDER_WIDTH), 400 - FRAME_BORDER_WIDTH - FRAME_TITLE_BAR_WIDTH);
 					XMoveWindow(display_, frame_close_[ev.window], displayOffset + 400 - (FRAME_BORDER_WIDTH) - 25, 4);
 					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayOffset + 400 - (FRAME_BORDER_WIDTH) - 50, 4);
 
