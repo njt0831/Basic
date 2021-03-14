@@ -30,7 +30,7 @@ void Basic::handleButtonRelease(XButtonReleasedEvent ev){
 					XMoveWindow(display_, frame_close_[ev.window], 400 - (FRAME_BORDER_WIDTH) - 25, 4);
 					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], 400 - (FRAME_BORDER_WIDTH) - 50, 4);
 
-				}else if ((tempWindowAttributes.width == displayWidth - (2 * FRAME_BORDER_WIDTH)) and (tempWindowAttributes.height == displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT) and tempWindowAttributes.x == displayOffset and tempWindowAttributes.y == 0){
+				}else{ // if ((tempWindowAttributes.width == displayWidth - (2 * FRAME_BORDER_WIDTH)) and (tempWindowAttributes.height == displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT) and tempWindowAttributes.x == displayOffset and tempWindowAttributes.y == 0){
 					
 					XMoveWindow(display_, ev.window, displayOffset, 0);
 					XResizeWindow(display_, ev.window, displayWidth - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH));
@@ -38,19 +38,20 @@ void Basic::handleButtonRelease(XButtonReleasedEvent ev){
 					XMoveWindow(display_, frame_close_[ev.window], displayWidth - (2 * FRAME_BORDER_WIDTH) - 25, 4);
 					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayWidth - (2 * FRAME_BORDER_WIDTH) - 50, 4);
 
-				}else{
+				}	
+				//}else{
 
-					XMoveWindow(display_, ev.window, displayOffset, 0);
-					XResizeWindow(display_, ev.window, displayWidth - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
-					XResizeWindow(display_, frame_client_[ev.window], displayWidth - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
-					XMoveWindow(display_, frame_close_[ev.window], displayWidth - (2 * FRAME_BORDER_WIDTH) - 25, 4);
-					XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayWidth - (2 * FRAME_BORDER_WIDTH) - 50, 4);
-					
-				}
+				//	XMoveWindow(display_, ev.window, displayOffset, 0);
+				//	XResizeWindow(display_, ev.window, displayWidth - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - TASKBAR_HEIGHT);
+				//	XResizeWindow(display_, frame_client_[ev.window], displayWidth - (2 * FRAME_BORDER_WIDTH), displayHeight - (2 * FRAME_BORDER_WIDTH) - FRAME_TITLE_BAR_WIDTH - TASKBAR_HEIGHT);
+				//	XMoveWindow(display_, frame_close_[ev.window], displayWidth - (2 * FRAME_BORDER_WIDTH) - 25, 4);
+				//	XMoveWindow(display_, client_minimize_[frame_client_[ev.window]], displayWidth - (2 * FRAME_BORDER_WIDTH) - 50, 4);
+				//	
+				//}
 		
 			}else if(resizeDown){
 
-				fprintf(f, "No\n");
+				fprintf(f, "You tried to auto fit a window down. No\n");
 
 			}else if(resizeRight){
 

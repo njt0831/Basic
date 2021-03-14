@@ -107,3 +107,11 @@ int getMonitor(int x, int* offsets, int* widths, int nOffsets){
 	return -1;
 
 }
+
+//int log(){
+
+//	std::ofstream f;
+//	f.open("/root/log.txt", std::ios::app);
+//	f << 
+
+//}

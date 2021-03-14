@@ -54,18 +54,21 @@ Basic::Basic(){
 		sum = sum + monitorWidths[i];
 		
 		// Recently added the tasbar, refactor this somewhere else as functionality gets added and it makes sense
-		taskbar = XCreateSimpleWindow(display_, root_, monitorOffsets[i], monitorHeights[i] - TASKBAR_HEIGHT, monitorWidths[i], TASKBAR_HEIGHT, 0, FRAME_COLOR, FRAME_COLOR); 
-		XMapWindow(display_, taskbar);
+		// After using it for a while I realized taskbars are annoying
+		// Commenting out so that its still here when I change my mind
+		
+		//taskbar = XCreateSimpleWindow(display_, root_, monitorOffsets[i], monitorHeights[i] - TASKBAR_HEIGHT, monitorWidths[i], TASKBAR_HEIGHT, 0, FRAME_COLOR, FRAME_COLOR); 
+		//XMapWindow(display_, taskbar);
 
-		if (!i){
+		//if (!i){
 			
-			taskButton = XCreateSimpleWindow(display_, root_, monitorOffsets[i], 0, TASKBAR_HEIGHT, TASKBAR_HEIGHT, 0, BUTTON_BACKGROUND_COLOR, 0); 
-			XReparentWindow(display_, taskButton, taskbar, 0, 0);
-			XSelectInput(display_, taskButton, ButtonPressMask);
-			setCircular(display_, taskButton);
-			XMapWindow(display_, taskButton);
+		//	taskButton = XCreateSimpleWindow(display_, root_, monitorOffsets[i], 0, TASKBAR_HEIGHT, TASKBAR_HEIGHT, 0, BUTTON_BACKGROUND_COLOR, 0); 
+		//	XReparentWindow(display_, taskButton, taskbar, 0, 0);
+		//	XSelectInput(display_, taskButton, ButtonPressMask);
+		//	setCircular(display_, taskButton);
+		//	XMapWindow(display_, taskButton);
 			
-		}
+		//}
 	}
 
 	// Initialize a log file object for debugging

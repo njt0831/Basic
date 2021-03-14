@@ -1,9 +1,6 @@
 #include "Basic.hpp"
 
 void Basic::handleMotionNotify(XPointerMovedEvent ev){
-	
-	fprintf(f, "%i\n", ev.x);
-
 
 	// If this window is currently hooked
 	if (ev.window == hookWin){

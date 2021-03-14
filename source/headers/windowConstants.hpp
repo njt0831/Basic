@@ -13,7 +13,7 @@ const int START_MENU_HIGHLIGHT_COLOR = 0x908181;
 const int DISPLAY_HEIGHT = 1080;
 const int DISPLAY_WIDTH = 1920;
 const int TASKBAR_HEIGHT = 40;
-const int START_MENU_WIDTH = 300;
+const int START_MENU_WIDTH = 250;
 
 const std::string START_MENU_OPTIONS[START_MENU_OPTION_COUNT] = {
 	

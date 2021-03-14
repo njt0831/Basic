@@ -1,7 +1,7 @@
 #include "Basic.hpp"
 
 void Basic::handleButtonPress(XButtonPressedEvent ev){
-	
+
 	// Check if the start menu is open, then close it if it wasnt the window that was clicked 
 	if (dropdown && !(drop_index_.count(ev.window))){
 		
@@ -47,25 +47,25 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 		XDestroyWindow(display_, ev.window);
 	
 	// If this is the taskbar button
-	}else if (ev.window == taskButton){
+	//}else if (ev.window == taskButton){
 
 		// Create the start menu, then populate it with the buttons specified in the windowConstants file
 
-		dropdown = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT * START_MENU_OPTION_COUNT, 2, 0x000000, FRAME_COLOR);
-		XMapWindow(display_, dropdown);
-						
-		for (unsigned int i=0;i < START_MENU_OPTION_COUNT; i++){
-			
-			tempWindowFrame = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT) + (i * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT, 0, FRAME_BORDER_COLOR, FRAME_COLOR);
-			XSelectInput(display_, tempWindowFrame, ButtonPressMask | EnterWindowMask | LeaveWindowMask);
-			XReparentWindow(display_, tempWindowFrame, dropdown, 0, i * START_MENU_HEIGHT);
-			XMapWindow(display_, tempWindowFrame);
-			XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), 10, START_MENU_HEIGHT / 2 + 4, START_MENU_OPTIONS[i].c_str(), START_MENU_OPTIONS[i].length());	
-			drop_index_[tempWindowFrame] = i;
-			
-		}
-
-
+	//	dropdown = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT * START_MENU_OPTION_COUNT, 2, 0x000000, FRAME_COLOR);
+	//	XMapWindow(display_, dropdown);
+	//					
+	//	for (unsigned int i=0;i < START_MENU_OPTION_COUNT; i++){
+	//		
+	//		tempWindowFrame = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT) + (i * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT, 0, FRAME_BORDER_COLOR, FRAME_COLOR);
+	//		XSelectInput(display_, tempWindowFrame, ButtonPressMask | EnterWindowMask | LeaveWindowMask);
+	//		XReparentWindow(display_, tempWindowFrame, dropdown, 0, i * START_MENU_HEIGHT);
+	//		XMapWindow(display_, tempWindowFrame);
+	//		XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), 10, START_MENU_HEIGHT / 2 + 4, START_MENU_OPTIONS[i].c_str(), START_MENU_OPTIONS[i].length());	
+	//		drop_index_[tempWindowFrame] = i;
+	//		
+	//	}
+	//
+	
 	// If this is a start menu button
 	}else if (drop_index_.count(ev.window)){
 
@@ -94,6 +94,12 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 				break;
 		
 		}
+
+		// Destroy the window afte a selection is made
+		XDestroySubwindows(display_, dropdown);
+		XDestroyWindow(display_, dropdown);
+		dropdown = 0;
+		drop_index_.clear();
 	
 	// Otherwise if this is any other window
 	}else if(ev.window != root_){
@@ -120,6 +126,24 @@ void Basic::handleButtonPress(XButtonPressedEvent ev){
 			if (ev.y > hookHeight - 4){resizeDown = 1;}
 			if (ev.y < 4){resizeUp = 1;}
 
+		}
+
+	}else if (ev.button == Button3){
+
+		// Create the start menu, then populate it with the buttons specified in the windowConstants file
+
+		dropdown = XCreateSimpleWindow(display_, root_, ev.x, ev.y, START_MENU_WIDTH, START_MENU_HEIGHT * START_MENU_OPTION_COUNT, 2, 0x000000, FRAME_COLOR);
+		XMapWindow(display_, dropdown);
+						
+		for (unsigned int i=0;i < START_MENU_OPTION_COUNT; i++){
+			
+			tempWindowFrame = XCreateSimpleWindow(display_, root_, 0, DISPLAY_HEIGHT - TASKBAR_HEIGHT - 4 - (START_MENU_OPTION_COUNT * START_MENU_HEIGHT) + (i * START_MENU_HEIGHT), START_MENU_WIDTH, START_MENU_HEIGHT, 0, FRAME_BORDER_COLOR, FRAME_COLOR);
+			XSelectInput(display_, tempWindowFrame, ButtonPressMask | EnterWindowMask | LeaveWindowMask);
+			XReparentWindow(display_, tempWindowFrame, dropdown, 0, i * START_MENU_HEIGHT);
+			XMapWindow(display_, tempWindowFrame);
+			XDrawString(display_, tempWindowFrame, XDefaultGC(display_, DefaultScreen(display_)), 10, START_MENU_HEIGHT / 2 + 4, START_MENU_OPTIONS[i].c_str(), START_MENU_OPTIONS[i].length());	
+			drop_index_[tempWindowFrame] = i;
+			
 		}
 
 	}
