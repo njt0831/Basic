@@ -108,6 +108,7 @@ int getMonitor(int x, int* offsets, int* widths, int nOffsets){
 
 }
 
+
 //int log(){
 
 //	std::ofstream f;

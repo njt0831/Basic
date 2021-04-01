@@ -17,12 +17,14 @@
 #include <ctime>
 #include <vector>
 #include <math.h>
+#include <fstream>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/Xcursor/Xcursor.h>
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xrandr.h>
+
 
 class Basic {
 
@@ -40,7 +42,8 @@ class Basic {
 		void handleMotionNotify(XPointerMovedEvent ev);
 		void handleEnterNotify(XEnterWindowEvent ev);
 		void handleLeaveNotify(XLeaveWindowEvent ev);
-		
+		void processState();
+
 		Display* display_;
 		Window root_;
 
@@ -97,6 +100,9 @@ class Basic {
 		bool resizeDown;
 		bool resizeUp;
 
+		// Misc other stuff
+		int batteryLife;
+		bool batteryNotifyFlag;
 		std::vector<std::string> backgrounds;
 		
 		// Log file object

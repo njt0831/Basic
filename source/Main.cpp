@@ -62,6 +62,8 @@ int main(){
 				break;
 
 		}
+
+		//basic->processState();
 	
 	}
 

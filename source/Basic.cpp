@@ -77,3 +77,25 @@ Basic::Basic(){
 	f = fopen("/root/log.txt", "w");
 	
 }
+
+void Basic::processState(){
+
+	std::ifstream file("/sys/class/power_supply/BAT1/capacity");
+	std::string val("");
+	char temp;
+	while (file.get(temp)){ val += temp; }
+	batteryLife = stoi(val, nullptr);
+	
+	if ((batteryLife < BATTERY_FLAG_CUTOFF) && (!batteryNotifyFlag)){
+		
+		Window batWindow = XCreateSimpleWindow(display_, root_, 1920 / 2 - 50, 1080 / 2 - 50, 100, 100, 0, FRAME_BORDER_COLOR, FRAME_COLOR);
+		XMapWindow(display_, batWindow);
+		batteryNotifyFlag = true;
+		
+	}else if ((batteryLife > BATTERY_FLAG_CUTOFF) and (batteryNotifyFlag)){
+		
+		batteryNotifyFlag = false;
+		
+	}
+	
+}
